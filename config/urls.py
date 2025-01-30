@@ -31,6 +31,7 @@ urlpatterns = [
     path("sonar/", include("django_sonar.urls")),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
+    path("veterinary/", include("veterinary.urls")),
 ]
 
 if settings.DEBUG:

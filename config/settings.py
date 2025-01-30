@@ -43,11 +43,7 @@ ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-VETONE_APPS = [
-    "account.apps.AccountConfig",
-    "common",
-    "monitoring",
-]
+VETONE_APPS = ["account.apps.AccountConfig", "common", "monitoring", "veterinary"]
 
 THIRD_PARTY_APPS = [
     "corsheaders",
