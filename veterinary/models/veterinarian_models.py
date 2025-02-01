@@ -31,5 +31,13 @@ class Veterinarian(BaseModel):
         related_name="veterinarian",
     )
 
+    city = models.ForeignKey(
+        "province.City",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="veterinarians",
+    )
+
     def __str__(self):
         return f"{self.medical_license} - {self.user.phone}"

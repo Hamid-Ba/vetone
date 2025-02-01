@@ -10,6 +10,8 @@ class VeterinarianTest(TestCase):
 
     def setUp(self):
         self.user = baker.make("account.User", phone="09151498722")
+        self.province = baker.make("province.Province")
+        self.city = baker.make("province.City", province=self.province)
 
         self.payload = {
             "license_image": "license.png",
@@ -17,7 +19,9 @@ class VeterinarianTest(TestCase):
             "medical_license": "09338973928",
             "issuance_date": date.today(),
         }
-        self.model = Veterinarian.objects.create(user=self.user, **self.payload)
+        self.model = Veterinarian.objects.create(
+            user=self.user, city=self.city, **self.payload
+        )
 
     def test_create_model_should_work_properly(self):
         """Test create model"""
