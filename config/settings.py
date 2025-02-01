@@ -49,6 +49,7 @@ VETONE_APPS = [
     "monitoring",
     "veterinary",
     "wallet",
+    "zarinpal.apps.ZarinpalConfig",
 ]
 
 THIRD_PARTY_APPS = [
@@ -192,6 +193,15 @@ DJANGO_SONAR = {
 }
 
 KAVENEGAR_API_KEY = os.getenv("KAVENEGAR_API_KEY")
+
+MERCHANT_ID = os.getenv("MERCHANT_ID")
+
+VERIFY_URL = "https://api.vetone.ir/zarinpal/verify_transaction/"
+FRONT_VERIFY = "https://vetone.ir/payment/verify/"
+
+ACADEMY_URL = "https://vetone.ir/academy"
+PHONE_SUPPORT = "02191035274"
+
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_ACCEPT_CONTENT = ["json"]

@@ -33,6 +33,7 @@ urlpatterns = [
     path("account/", include("account.urls")),
     path("veterinary/", include("veterinary.urls")),
     path("wallet/", include("wallet.urls")),
+    path("zarinpal/", include("zarinpal.urls")),
 ]
 
 if settings.DEBUG:
