@@ -47,6 +47,7 @@ VETONE_APPS = [
     "account.apps.AccountConfig",
     "common",
     "monitoring",
+    "province",
     "veterinary",
     "wallet",
     "zarinpal.apps.ZarinpalConfig",
