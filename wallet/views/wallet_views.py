@@ -1,7 +1,14 @@
 from django.utils.dateparse import parse_date
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
-from rest_framework import views, generics, response, status, permissions, authentication
+from rest_framework import (
+    views,
+    generics,
+    response,
+    status,
+    permissions,
+    authentication,
+)
 from rest_framework.filters import SearchFilter
 
 from monitoring.models.observability import CodeLog

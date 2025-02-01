@@ -28,8 +28,10 @@ class CodeLog(BaseModel):
     duration = models.FloatField(null=True, blank=True)  # Execution time, if relevant
     cpu_usage = models.FloatField(null=True, blank=True)  # Field to store CPU usage
     memory_usage = models.FloatField(null=True, blank=True)
-    
-    user = models.ForeignKey("account.User", on_delete=models.SET_NULL, null=True, blank=True)
+
+    user = models.ForeignKey(
+        "account.User", on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     class Meta:
         indexes = [
@@ -120,7 +122,9 @@ class CodeLog(BaseModel):
         )
 
     @classmethod
-    def log_client(cls, module, method, message, context=None, user=None, duration=None):
+    def log_client(
+        cls, module, method, message, context=None, user=None, duration=None
+    ):
         cpu_usage, memory_usage = cls._get_system_usage()
         cls.log_message(
             "ACTION_LOG",

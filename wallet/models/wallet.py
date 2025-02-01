@@ -40,7 +40,9 @@ class Wallet(BaseModel):
             pass
         if self.balance < 0:
             # Sending a notification is not enough and disable store
-            CodeLog.log_client("wallet.py", "def deduct", "your balance is under 0", None, self.user)
+            CodeLog.log_client(
+                "wallet.py", "def deduct", "your balance is under 0", None, self.user
+            )
 
         # Create a transaction log for deduction
         if not description:

@@ -20,7 +20,7 @@ def after_user_registration(sender, instance, created, **kwargs):
         if created:
             if not instance.is_staff:
                 sms = KavenegarSMS()
-                
+
                 phone_support = settings.PHONE_SUPPORT
 
                 try:
