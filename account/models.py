@@ -33,6 +33,10 @@ class UserManager(BaseUserManager):
         user.save()
 
         return user
+    
+    def get_admins(self):
+        """Get Admin"""
+        return self.filter(is_staff=True, is_superuser=True).all()
 
 
 class User(AbstractBaseUser, PermissionsMixin):

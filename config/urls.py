@@ -32,6 +32,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path("veterinary/", include("veterinary.urls")),
+    path("wallet/", include("wallet.urls")),
 ]
 
 if settings.DEBUG:
