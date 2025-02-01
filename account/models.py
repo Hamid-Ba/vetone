@@ -39,6 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """Custom User Model"""
 
     phone = models.CharField(max_length=11, unique=True, validators=[phone_validator])
+    email = models.EmailField(null=True, blank=True)
     fullName = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
