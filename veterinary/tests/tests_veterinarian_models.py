@@ -20,7 +20,7 @@ class VeterinarianTest(TestCase):
             "issuance_date": date.today(),
         }
         self.model = Veterinarian.objects.create(
-            user=self.user, city=self.city, **self.payload
+            user=self.user, province=self.province, city=self.city, **self.payload
         )
 
     def test_create_model_should_work_properly(self):

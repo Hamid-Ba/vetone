@@ -31,6 +31,14 @@ class Veterinarian(BaseModel):
         related_name="veterinarian",
     )
 
+    province = models.ForeignKey(
+        "province.Province",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="veterinarians",
+    )
+
     city = models.ForeignKey(
         "province.City",
         on_delete=models.SET_NULL,
