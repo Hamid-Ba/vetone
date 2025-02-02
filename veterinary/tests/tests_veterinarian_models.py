@@ -14,6 +14,7 @@ class VeterinarianTest(TestCase):
         self.city = baker.make("province.City", province=self.province)
 
         self.payload = {
+            "clinic_name": "test clinic",
             "license_image": "license.png",
             "national_id_image": "national.jpeg",
             "medical_license": "09338973928",

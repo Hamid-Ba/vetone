@@ -14,6 +14,7 @@ def veterinarian_image_file_path(instance, filename):
 
 
 class Veterinarian(BaseModel):
+    clinic_name = models.CharField(max_length=225, null=False, blank=False)
     medical_license = models.CharField(max_length=72, null=False, blank=False)
     license_image = models.ImageField(
         null=False, blank=False, upload_to=veterinarian_image_file_path
