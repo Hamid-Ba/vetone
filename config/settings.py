@@ -45,6 +45,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 VETONE_APPS = [
     "account.apps.AccountConfig",
+    "blog",
     "common",
     "monitoring",
     "province",
@@ -62,7 +63,11 @@ THIRD_PARTY_APPS = [
     "django_sonar",
     "django_celery_beat",
     "django_filters",
+    "ckeditor",
+    "django_jalali",
+    "jalali_date",
 ]
+
 
 INSTALLED_APPS = (
     [
@@ -193,6 +198,15 @@ DJANGO_SONAR = {
         "/__reload__/",
     ],
 }
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "none",
+        "height": 200,
+        "width": 600,
+    },
+}
+
 
 KAVENEGAR_API_KEY = os.getenv("KAVENEGAR_API_KEY")
 
