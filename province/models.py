@@ -52,6 +52,7 @@ class Address(BaseModel):
     )
 
     # rancher info
+    fullName = models.CharField(max_length=255, blank=True, null=True)
     village_name = models.CharField(max_length=255, blank=True, null=True)
 
     user = models.ForeignKey(
