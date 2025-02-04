@@ -44,10 +44,10 @@ class PrivateTest(TestCase):
             "national_id_image": national_id_image,
             "medical_license": "09338973928",
             "issuance_date": date.today(),
-            "medical_center": self.medical_center.id
+            "medical_center": self.medical_center.id,
         }
 
-        res = self.client.post(REGISTER_VETERINARIAN_URL, payload, format="multipart")        
+        res = self.client.post(REGISTER_VETERINARIAN_URL, payload, format="multipart")
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         veter = Veterinarian.objects.first()

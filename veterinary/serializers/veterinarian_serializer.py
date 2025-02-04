@@ -13,5 +13,5 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
             "license_image",
             "national_id_image",
             "issuance_date",
-            "medical_center"
+            "medical_center",
         ]
