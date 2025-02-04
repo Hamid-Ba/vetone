@@ -13,6 +13,24 @@ def veterinarian_image_file_path(instance, filename):
     return os.path.join("uploads", "veterinarian", filename)
 
 
+class MedicalCenter(BaseModel):
+    """Medical Center"""
+
+    title = models.CharField(max_length=72, null=False, blank=False)
+    description = models.CharField(max_length=225, null=True, blank=True)
+
+    gallery = models.ForeignKey(
+        "gallery.Gallery",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="centers",
+    )
+
+    def __str__(self):
+        return self.title
+
+
 class Veterinarian(BaseModel):
     class WorkStatus(models.TextChoices):
         Busy = "B", "Busy"
@@ -42,6 +60,10 @@ class Veterinarian(BaseModel):
         related_name="veterinarian",
     )
 
+    medical_center = models.ForeignKey(
+        MedicalCenter, on_delete=models.CASCADE, null=False, blank=False
+    )
+
     province = models.ForeignKey(
         "province.Province",
         on_delete=models.SET_NULL,
@@ -60,21 +82,3 @@ class Veterinarian(BaseModel):
 
     def __str__(self):
         return f"{self.medical_license} - {self.user.phone}"
-
-
-class MedicalCenter(BaseModel):
-    """Medical Center"""
-
-    title = models.CharField(max_length=72, null=False, blank=False)
-    description = models.CharField(max_length=225, null=True, blank=True)
-
-    gallery = models.ForeignKey(
-        "gallery.Gallery",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="centers",
-    )
-
-    def __str__(self):
-        return self.title

@@ -12,6 +12,7 @@ class VeterinarianTest(TestCase):
         self.user = baker.make("account.User", phone="09151498722")
         self.province = baker.make("province.Province")
         self.city = baker.make("province.City", province=self.province)
+        self.medical_center = baker.make(MedicalCenter)
 
         self.payload = {
             "clinic_name": "test clinic",
@@ -21,7 +22,11 @@ class VeterinarianTest(TestCase):
             "issuance_date": date.today(),
         }
         self.model = Veterinarian.objects.create(
-            user=self.user, province=self.province, city=self.city, **self.payload
+            user=self.user,
+            medical_center=self.medical_center,
+            province=self.province,
+            city=self.city,
+            **self.payload,
         )
 
     def test_create_model_should_work_properly(self):
@@ -30,6 +35,7 @@ class VeterinarianTest(TestCase):
             self.assertEqual(getattr(self.model, k), v)
 
         self.assertEqual(self.model.user, self.user)
+        self.assertEqual(self.model.medical_center, self.medical_center)
 
     def test_str_obj_should_work_properly(self):
         """test str"""

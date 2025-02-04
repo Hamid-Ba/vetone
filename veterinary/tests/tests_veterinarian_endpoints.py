@@ -10,7 +10,7 @@ from model_bakery import baker
 from io import BytesIO
 from PIL import Image
 
-from ..models import Veterinarian
+from ..models import Veterinarian, MedicalCenter
 
 REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
 
@@ -22,6 +22,7 @@ class PrivateTest(TestCase):
         self.client = APIClient()
         self.user = baker.make("account.User", phone="09151498722")
         self.client.force_authenticate(self.user)
+        self.medical_center = baker.make(MedicalCenter)
         self.uploaded_files = []  # Store file paths for cleanup
 
     def _generate_test_image(self):
@@ -43,9 +44,10 @@ class PrivateTest(TestCase):
             "national_id_image": national_id_image,
             "medical_license": "09338973928",
             "issuance_date": date.today(),
+            "medical_center": self.medical_center.id
         }
 
-        res = self.client.post(REGISTER_VETERINARIAN_URL, payload, format="multipart")
+        res = self.client.post(REGISTER_VETERINARIAN_URL, payload, format="multipart")        
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         veter = Veterinarian.objects.first()
