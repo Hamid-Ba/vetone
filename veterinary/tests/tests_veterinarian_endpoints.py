@@ -11,12 +11,33 @@ from io import BytesIO
 from PIL import Image
 
 from ..models import Veterinarian, MedicalCenter
+from ..serializers import MedicalCenterSerializer
 
 REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
+MEDICAL_CENTER_URL = reverse("veterinary:centers")
+
+
+class PublicTest(TestCase):
+    """Test Those Endpoints Who Do Not Need User To Be Authorized"""
+
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_medical_center_list_api_should_work_properly(self):
+        """Test Medical Center List API"""
+
+        center_1 = baker.make(MedicalCenter)
+        center_2 = baker.make(MedicalCenter)
+
+        res = self.client.get(MEDICAL_CENTER_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.assertIn(MedicalCenterSerializer(center_1).data, res.json())
+        self.assertIn(MedicalCenterSerializer(center_2).data, res.json())
 
 
 class PrivateTest(TestCase):
-    """Test Those Endpoints Which Need User To Be Authorized"""
+    """Test Those Endpoints Who Need User To Be Authorized"""
 
     def setUp(self):
         self.client = APIClient()

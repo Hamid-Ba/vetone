@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, authentication
 
-from ..models import Veterinarian
+from ..models import Veterinarian, MedicalCenter
 from ..serializers import veterinarian_serializer
 
 
@@ -15,3 +15,10 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
     def perform_create(self, serializer):
         """Register Veterinarian"""
         return serializer.save(user=self.request.user)
+
+
+class MedicalCenterListAPI(generics.ListAPIView):
+    """Medical Center List API"""
+
+    queryset = MedicalCenter.objects.all()
+    serializer_class = veterinarian_serializer.MedicalCenterSerializer

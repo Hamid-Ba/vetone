@@ -1,5 +1,4 @@
-from django.urls import include, path
-from rest_framework import routers
+from django.urls import path
 
 from .views import *
 
@@ -11,5 +10,10 @@ urlpatterns = [
         "register_veterinarian/",
         RegisterVeterinarianAPI.as_view(),
         name="register_veterinarian",
+    ),
+    path(
+        "centers/",
+        MedicalCenterListAPI.as_view(),
+        name="centers",
     ),
 ]

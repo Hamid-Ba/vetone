@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Veterinarian
+from ..models import Veterinarian, MedicalCenter
 
 
 class RegisterVeterinarianSerializer(serializers.ModelSerializer):
@@ -15,3 +15,11 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
             "issuance_date",
             "medical_center",
         ]
+
+
+class MedicalCenterSerializer(serializers.ModelSerializer):
+    """Medical Center Serializer"""
+
+    class Meta:
+        model = MedicalCenter
+        fields = "__all__"
