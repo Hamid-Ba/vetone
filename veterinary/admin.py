@@ -11,4 +11,13 @@ class VeterinarianAdminModel(admin.ModelAdmin):
     list_editable = ["is_active"]
 
 
+class MedicalCenterAdminModel(admin.ModelAdmin):
+    """MedicalCenter Admin Model"""
+
+    list_display = ["id", "title", "description", "is_active"]
+    list_display_links = ["id", "title"]
+    list_editable = ["is_active"]
+
+
 admin.site.register(Veterinarian, VeterinarianAdminModel)
+admin.site.register(MedicalCenter, MedicalCenterAdminModel)
