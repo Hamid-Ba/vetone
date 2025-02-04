@@ -2,11 +2,11 @@ from model_bakery import baker
 from django.test import TestCase
 from datetime import date
 
-from ..models import Veterinarian
+from ..models import Veterinarian, MedicalCenter
 
 
 class VeterinarianTest(TestCase):
-    """Veterinarian Model"""
+    """Veterinarian Model Test"""
 
     def setUp(self):
         self.user = baker.make("account.User", phone="09151498722")
@@ -36,4 +36,28 @@ class VeterinarianTest(TestCase):
         self.assertEqual(
             str(self.model),
             f"{self.payload.get('medical_license', 'test')} - {self.user.phone}",
+        )
+
+
+class MedicalCenterTest(TestCase):
+    """Medical Center Model Test"""
+
+    def setUp(self):
+        self.gallery = baker.make("gallery.Gallery")
+
+        self.payload = {"title": "test", "description": "test desc"}
+        self.model = MedicalCenter.objects.create(gallery=self.gallery, **self.payload)
+
+    def test_create_model_should_work_properly(self):
+        """Test create model"""
+        for k, v in self.payload.items():
+            self.assertEqual(getattr(self.model, k), v)
+
+        self.assertEqual(self.model.gallery, self.gallery)
+
+    def test_str_obj_should_work_properly(self):
+        """test str"""
+        self.assertEqual(
+            str(self.model),
+            self.payload.get("title", "test"),
         )

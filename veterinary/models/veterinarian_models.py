@@ -60,3 +60,21 @@ class Veterinarian(BaseModel):
 
     def __str__(self):
         return f"{self.medical_license} - {self.user.phone}"
+
+
+class MedicalCenter(BaseModel):
+    """Medical Center"""
+
+    title = models.CharField(max_length=72, null=False, blank=False)
+    description = models.CharField(max_length=225, null=True, blank=True)
+
+    gallery = models.ForeignKey(
+        "gallery.Gallery",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="centers",
+    )
+
+    def __str__(self):
+        return self.title
