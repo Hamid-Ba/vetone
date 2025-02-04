@@ -14,6 +14,12 @@ def veterinarian_image_file_path(instance, filename):
 
 
 class Veterinarian(BaseModel):
+    class WorkStatus(models.TextChoices):
+        Busy = "B", "Busy"
+        Examination = "E", "Examination"
+        Free = "F", "Free"
+        Responsible = "R", "Responsible"
+
     clinic_name = models.CharField(max_length=225, null=False, blank=False)
     medical_license = models.CharField(max_length=72, null=False, blank=False)
     license_image = models.ImageField(
@@ -23,6 +29,10 @@ class Veterinarian(BaseModel):
         null=False, blank=False, upload_to=veterinarian_image_file_path
     )
     issuance_date = models.DateField(null=False, blank=False)
+
+    state = models.CharField(
+        max_length=1, default=WorkStatus.Busy, choices=WorkStatus.choices
+    )
 
     user = models.OneToOneField(
         "account.User",
