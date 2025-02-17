@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from ..models import Rancher
+from ..models import Animal, Rancher
+
+
+class AnimalSerializer(serializers.ModelSerializer):
+    """Animal Serializer"""
+
+    class Meta:
+        model = Animal
+        fields = "__all__"
 
 
 class RancherSerializer(serializers.ModelSerializer):

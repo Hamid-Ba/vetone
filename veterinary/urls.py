@@ -31,4 +31,9 @@ urlpatterns = [
         RemoveRancherAPI.as_view(),
         name="remove_rancher",
     ),
+    path(
+        "animals/",
+        AnimalListAPI.as_view(),
+        name="animals",
+    ),
 ]
