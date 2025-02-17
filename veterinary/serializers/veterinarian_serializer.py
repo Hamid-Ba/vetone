@@ -10,6 +10,7 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
         model = Veterinarian
         fields = [
             "medical_license",
+            "license_type",
             "license_image",
             "national_id_image",
             "issuance_date",

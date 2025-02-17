@@ -37,9 +37,16 @@ class Veterinarian(BaseModel):
         Examination = "E", "Examination"
         Free = "F", "Free"
         Responsible = "R", "Responsible"
-
+        
+    class LicenseType(models.TextChoices):
+        Test1 = "1", "Test1"
+        Test2 = "2", "Test2"
+        
     clinic_name = models.CharField(max_length=225, null=False, blank=False)
     medical_license = models.CharField(max_length=72, null=False, blank=False)
+    license_type = models.CharField(
+        max_length=1, default=LicenseType.Test1, choices=LicenseType.choices
+    )
     license_image = models.ImageField(
         null=False, blank=False, upload_to=veterinarian_image_file_path
     )
@@ -47,9 +54,19 @@ class Veterinarian(BaseModel):
         null=False, blank=False, upload_to=veterinarian_image_file_path
     )
     issuance_date = models.DateField(null=False, blank=False)
+    
+    bio = models.CharField(max_length=1000, null=True, blank=True)
 
     state = models.CharField(
         max_length=1, default=WorkStatus.Busy, choices=WorkStatus.choices
+    )
+    
+    image = models.ImageField(
+        null=True, blank=True, upload_to=veterinarian_image_file_path
+    )
+    
+    background_image = models.ImageField(
+        null=True, blank=True, upload_to=veterinarian_image_file_path
     )
 
     user = models.OneToOneField(
