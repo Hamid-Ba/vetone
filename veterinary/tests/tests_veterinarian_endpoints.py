@@ -20,6 +20,10 @@ ADD_RANCHER_URL = reverse("veterinary:add_rancher")
 REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
 
 
+def remove_rancher_url(phone: str):
+    return reverse("veterinary:remove_rancher", kwargs={"phone": phone})
+
+
 class PublicTest(TestCase):
     """Test Those Endpoints Who Do Not Need User To Be Authorized"""
 
@@ -110,6 +114,24 @@ class PrivateTest(TestCase):
 
         self.assertEqual(rancher_address.city, city)
         self.assertEqual(rancher_address.village_name, payload["village_name"])
+
+    def test_delete_rancher_from_veterinarian_list_api(self):
+        """Test Delete Rancher From Veterinarian List"""
+        veteinarian = baker.make(Veterinarian, user=self.user)
+
+        user_2 = baker.make("account.User", phone="09151498721")
+        rancher = Rancher.objects.get(user=user_2)
+        rancher.veterinarians.add(veteinarian)
+
+        self.assertTrue(rancher.veterinarians.contains(veteinarian))
+
+        url = remove_rancher_url(user_2.phone)
+        res = self.client.delete(url)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+        rancher.refresh_from_db()
+
+        self.assertFalse(rancher.veterinarians.contains(veteinarian))
 
     def tearDown(self):
         """Clean up test images after the test"""

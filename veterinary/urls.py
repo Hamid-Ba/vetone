@@ -21,4 +21,9 @@ urlpatterns = [
         AddRancherAPI.as_view(),
         name="add_rancher",
     ),
+    path(
+        "remove_rancher/<str:phone>",
+        RemoveRancherAPI.as_view(),
+        name="remove_rancher",
+    ),
 ]

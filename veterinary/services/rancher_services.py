@@ -20,3 +20,16 @@ def add_rancher(*, veterinarian_user, fullName, phone, village_name, city_id):
     Address.objects.create(user=user, village_name=village_name, city_id=city_id)
 
     return rancher
+
+
+def remove_rancher(*, veterinarian_user: User, rancher: Rancher):
+    """Remove Rancher"""
+    try:
+        veterinarian = Veterinarian.objects.get(user=veterinarian_user)
+
+        rancher.veterinarians.remove(veterinarian)
+        rancher.save()
+    except:
+        return False
+
+    return not rancher.veterinarians.contains(veterinarian)
