@@ -10,11 +10,14 @@ from model_bakery import baker
 from io import BytesIO
 from PIL import Image
 
+from province.models import Address
+
 from ..models import Veterinarian, MedicalCenter, Rancher
 from ..serializers import MedicalCenterSerializer
 
-REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
 MEDICAL_CENTER_URL = reverse("veterinary:centers")
+ADD_RANCHER_URL = reverse("veterinary:add_rancher")
+REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
 
 
 class PublicTest(TestCase):
@@ -82,6 +85,31 @@ class PrivateTest(TestCase):
             self.uploaded_files.append(veter.license_image.path)
         if veter.national_id_image:
             self.uploaded_files.append(veter.national_id_image.path)
+
+    def test_add_rancher_should_work_properly(self):
+        """Test Add Rancher"""
+        province = baker.make("province.Province")
+        city = baker.make("province.City", province=province)
+        baker.make(Veterinarian, user=self.user)
+
+        payload = {
+            "fullName": "test",
+            "phone": "09151498721",
+            "village_name": "test",
+            "city_id": city.id,
+        }
+
+        res = self.client.post(ADD_RANCHER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        rancher = Rancher.objects.get(user__phone=payload["phone"])
+        rancher_address = Address.objects.get(user=rancher.user)
+
+        self.assertEqual(rancher.user.fullName, payload["fullName"])
+        self.assertEqual(rancher.veterinarians.first().user, self.user)
+
+        self.assertEqual(rancher_address.city, city)
+        self.assertEqual(rancher_address.village_name, payload["village_name"])
 
     def tearDown(self):
         """Clean up test images after the test"""

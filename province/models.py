@@ -39,7 +39,9 @@ class City(models.Model):
 class Address(BaseModel):
     """Address Model"""
 
-    street = models.CharField(max_length=255, blank=False, null=False)
+    street = models.CharField(
+        max_length=255, blank=False, null=False, default="لطفا پر کنید"
+    )
     city = models.ForeignKey(City, null=False, blank=False, on_delete=models.CASCADE)
 
     # veterinarain info

@@ -16,4 +16,9 @@ urlpatterns = [
         MedicalCenterListAPI.as_view(),
         name="centers",
     ),
+    path(
+        "add_rancher/",
+        AddRancherAPI.as_view(),
+        name="add_rancher",
+    ),
 ]
