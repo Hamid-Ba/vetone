@@ -26,5 +26,6 @@ class MedicalCenterAdminModel(admin.ModelAdmin):
     list_editable = ["is_active"]
 
 
+admin.site.register(Rancher, RancherAdminModel)
 admin.site.register(Veterinarian, VeterinarianAdminModel)
 admin.site.register(MedicalCenter, MedicalCenterAdminModel)
