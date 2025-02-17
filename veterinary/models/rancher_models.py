@@ -15,10 +15,9 @@ def rancher_image_file_path(instance, filename):
 
 class Rancher(BaseModel):
     """Rancher Model"""
-    image = models.ImageField(
-        null=True, blank=True, upload_to=rancher_image_file_path
-    )
-           
+
+    image = models.ImageField(null=True, blank=True, upload_to=rancher_image_file_path)
+
     user = models.OneToOneField(
         "account.User",
         on_delete=models.CASCADE,

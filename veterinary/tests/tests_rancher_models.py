@@ -8,11 +8,11 @@ class RancherTest(TestCase):
     """Rancher Model Test"""
 
     def setUp(self):
-        self.user = baker.make("account.User", phone="09151498722", fullName="Hamid Balalzadeh")
-        
-        self.model = Rancher.objects.get(
-            user=self.user
+        self.user = baker.make(
+            "account.User", phone="09151498722", fullName="Hamid Balalzadeh"
         )
+
+        self.model = Rancher.objects.get(user=self.user)
 
     def test_create_model_should_work_properly(self):
         """Test create model"""

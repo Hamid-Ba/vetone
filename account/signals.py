@@ -18,7 +18,7 @@ def after_user_registration(sender, instance, created, **kwargs):
     IS_TEST = config("IS_TEST", default=False, cast=bool)
     if created:
         Wallet.objects.get_or_create(user=instance, balance=50000)
-        if not instance.is_staff :
+        if not instance.is_staff:
             Rancher.objects.get_or_create(user=instance)
     if not IS_TEST:
         if created:

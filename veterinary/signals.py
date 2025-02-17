@@ -16,5 +16,10 @@ def after_veterinarian_registration(sender, instance, created, **kwargs):
             rancher = Rancher.objects.get(user=instance.user)
             rancher.delete()
         except ObjectDoesNotExist as e:
-            CodeLog.log_warning("signals.py", "def after_veterinarian_registration", "Rancher Does Not Found", {"user_phone": instance.user.phone})
+            CodeLog.log_warning(
+                "signals.py",
+                "def after_veterinarian_registration",
+                "Rancher Does Not Found",
+                {"user_phone": instance.user.phone},
+            )
             pass
