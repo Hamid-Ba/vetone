@@ -3,6 +3,15 @@ from django.contrib import admin
 from .models import *
 
 
+class AnimalAdminModel(admin.ModelAdmin):
+    """Animal Admin Model"""
+
+    list_display = ["id", "name"]
+    list_display_links = ["id", "name"]
+
+    search_fields = ["name"]
+
+
 class RancherAdminModel(admin.ModelAdmin):
     """Rancher Admin Model"""
 
@@ -26,6 +35,7 @@ class MedicalCenterAdminModel(admin.ModelAdmin):
     list_editable = ["is_active"]
 
 
+admin.site.register(Animal, AnimalAdminModel)
 admin.site.register(Rancher, RancherAdminModel)
 admin.site.register(Veterinarian, VeterinarianAdminModel)
 admin.site.register(MedicalCenter, MedicalCenterAdminModel)

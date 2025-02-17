@@ -32,3 +32,19 @@ class Rancher(BaseModel):
 
     def __str__(self):
         return f"{self.user.fullName} - {self.user.phone}"
+
+
+class Animal(BaseModel):
+    """Animal Model"""
+
+    name = models.CharField(max_length=125, blank=False, null=False)
+    image = models.ForeignKey(
+        "gallery.Gallery",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="animals",
+    )
+
+    def __str__(self):
+        return self.name
