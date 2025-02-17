@@ -44,6 +44,9 @@ class Address(BaseModel):
     )
     city = models.ForeignKey(City, null=False, blank=False, on_delete=models.CASCADE)
 
+    latitude = models.CharField(max_length=125, blank=True, null=True)
+    longitude = models.CharField(max_length=125, blank=True, null=True)
+
     # veterinarain info
     clinic_name = models.CharField(max_length=255, blank=True, null=True)
     google_map_url = models.URLField(
