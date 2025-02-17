@@ -10,7 +10,7 @@ from model_bakery import baker
 from io import BytesIO
 from PIL import Image
 
-from ..models import Veterinarian, MedicalCenter
+from ..models import Veterinarian, MedicalCenter, Rancher
 from ..serializers import MedicalCenterSerializer
 
 REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
@@ -67,13 +67,16 @@ class PrivateTest(TestCase):
             "issuance_date": date.today(),
             "medical_center": self.medical_center.id,
         }
+        
+        self.assertTrue(Rancher.objects.filter(user=self.user).exists())
 
         res = self.client.post(REGISTER_VETERINARIAN_URL, payload, format="multipart")
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-
+        
         veter = Veterinarian.objects.first()
 
         self.assertEqual(veter.user, self.user)
+        self.assertFalse(Rancher.objects.filter(user=self.user).exists())
 
         if veter.license_image:
             self.uploaded_files.append(veter.license_image.path)

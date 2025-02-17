@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from monitoring.models.observability import CodeLog
 from notifications import KavenegarSMS
 from wallet.models.wallet import Wallet
+from veterinary.models import Rancher
 
 from .models import User
 from decouple import config
@@ -15,7 +16,10 @@ from decouple import config
 def after_user_registration(sender, instance, created, **kwargs):
     """Create Wallet For User after Registration"""
     IS_TEST = config("IS_TEST", default=False, cast=bool)
-    Wallet.objects.get_or_create(user=instance, balance=50000)
+    if created:
+        Wallet.objects.get_or_create(user=instance, balance=50000)
+        if not instance.is_staff :
+            Rancher.objects.get_or_create(user=instance)
     if not IS_TEST:
         if created:
             if not instance.is_staff:

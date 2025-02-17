@@ -49,7 +49,7 @@ VETONE_APPS = [
     "common",
     "monitoring",
     "province",
-    "veterinary",
+    "veterinary.apps.VeterinaryConfig",
     "gallery",
     "wallet",
     "zarinpal.apps.ZarinpalConfig",
