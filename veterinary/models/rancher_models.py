@@ -30,21 +30,5 @@ class Rancher(BaseModel):
         related_name="rancher",
     )
 
-    province = models.ForeignKey(
-        "province.Province",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="ranchers",
-    )
-
-    city = models.ForeignKey(
-        "province.City",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="ranchers",
-    )
-
     def __str__(self):
         return f"{self.user.fullName} - {self.user.phone}"

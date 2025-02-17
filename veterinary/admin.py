@@ -3,6 +3,13 @@ from django.contrib import admin
 from .models import *
 
 
+class RancherAdminModel(admin.ModelAdmin):
+    """Rancher Admin Model"""
+
+    list_display = ["id", "user"]
+    list_display_links = ["id", "user"]
+
+
 class VeterinarianAdminModel(admin.ModelAdmin):
     """Veterinarian Admin Model"""
 
