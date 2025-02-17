@@ -8,6 +8,7 @@ from rest_framework import (
     status,
 )
 
+from config.pagination import StandardPagination
 from monitoring.models.observability import CodeLog
 
 from ..services import rancher_services
@@ -33,6 +34,19 @@ class MedicalCenterListAPI(generics.ListAPIView):
 
     queryset = MedicalCenter.objects.all()
     serializer_class = veterinarian_serializer.MedicalCenterSerializer
+
+
+class RancherListAPI(generics.ListAPIView):
+    """Rancher List API"""
+
+    queryset = Rancher.objects.order_by("-id")
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    pagination_class = StandardPagination
+    serializer_class = rancher_serializer.RancherVeterinarianSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(veterinarians__user=self.request.user)
 
 
 class AddRancherAPI(views.APIView):

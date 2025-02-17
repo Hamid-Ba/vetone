@@ -13,9 +13,10 @@ from PIL import Image
 from province.models import Address
 
 from ..models import Veterinarian, MedicalCenter, Rancher
-from ..serializers import MedicalCenterSerializer
+from ..serializers import MedicalCenterSerializer, RancherVeterinarianSerializer
 
 MEDICAL_CENTER_URL = reverse("veterinary:centers")
+LIST_RANCHER_URL = reverse("veterinary:ranchers")
 ADD_RANCHER_URL = reverse("veterinary:add_rancher")
 REGISTER_VETERINARIAN_URL = reverse("veterinary:register_veterinarian")
 
@@ -114,6 +115,31 @@ class PrivateTest(TestCase):
 
         self.assertEqual(rancher_address.city, city)
         self.assertEqual(rancher_address.village_name, payload["village_name"])
+
+    def test_get_list_of_veterinarian_ranchers_api(self):
+        """Test Get List Of Veterinarian Rancher"""
+        veteinarian = baker.make(Veterinarian, user=self.user)
+
+        user_1 = baker.make("account.User", phone="09151498723")
+        veteinarian_2 = baker.make(Veterinarian, user=user_1)
+
+        user_2 = baker.make("account.User", phone="09151498721")
+        rancher_1 = Rancher.objects.get(user=user_2)
+        rancher_1.veterinarians.add(veteinarian)
+
+        user_3 = baker.make("account.User", phone="09151498720")
+        rancher_2 = Rancher.objects.get(user=user_3)
+        rancher_2.veterinarians.add(veteinarian)
+        rancher_2.veterinarians.add(veteinarian_2)
+
+        res = self.client.get(LIST_RANCHER_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        rancher_1 = RancherVeterinarianSerializer(rancher_1, many=False).data
+        rancher_2 = RancherVeterinarianSerializer(rancher_2, many=False).data
+
+        self.assertIn(rancher_1, res.json()["results"])
+        self.assertIn(rancher_2, res.json()["results"])
 
     def test_delete_rancher_from_veterinarian_list_api(self):
         """Test Delete Rancher From Veterinarian List"""

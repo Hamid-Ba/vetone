@@ -58,7 +58,11 @@ class Address(BaseModel):
     village_name = models.CharField(max_length=255, blank=True, null=True)
 
     user = models.ForeignKey(
-        "account.User", on_delete=models.CASCADE, null=False, blank=False
+        "account.User",
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name="addresses",
     )
 
     def __str__(self):
