@@ -20,6 +20,9 @@ class VeterinarianTest(TestCase):
             "national_id_image": "national.jpeg",
             "medical_license": "09338973928",
             "issuance_date": date.today(),
+            "rate": 0,
+            "surgery": 0,
+            "experience": 10,
         }
         self.model = Veterinarian.objects.create(
             user=self.user,

@@ -69,6 +69,10 @@ class Veterinarian(BaseModel):
         null=True, blank=True, upload_to=veterinarian_image_file_path
     )
 
+    rate = models.IntegerField(default=0)
+    surgery = models.IntegerField(default=0)
+    experience = models.IntegerField(default=0)
+
     user = models.OneToOneField(
         "account.User",
         on_delete=models.CASCADE,
