@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import (
     views,
@@ -12,6 +13,7 @@ from config.pagination import StandardPagination
 from monitoring.models.observability import CodeLog
 
 from ..services import rancher_services
+from ..filters import VeterinarianFilter
 from ..models import Veterinarian, MedicalCenter, Rancher
 from ..serializers import veterinarian_serializer, rancher_serializer, serializers
 
@@ -144,3 +146,32 @@ class RemoveRancherAPI(views.APIView):
         return response.Response(
             {"message": "STH Goes Wrong!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+class SearchVeterinarianAPI(generics.ListAPIView):
+    """
+    - Example
+            •	Full-text search: GET /veterinary/?search=laptop
+        •	Filter by price range: GET /veterinary/?price_min=1000&price_max=5000
+        •	Filter by stock: GET /veterinary/?stock_min=10&stock_max=100
+        •	Order by price: GET /veterinary/?ordering=price
+        •	Filter by brand name: GET /veterinary/?brand=Apple
+    """
+
+    queryset = Veterinarian.objects.all().select_related("user", "province", "city")
+    serializer_class = veterinarian_serializer.VeterinarianSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = VeterinarianFilter
+    pagination_class = StandardPagination
+
+    # Search configuration
+    search_fields = ["user__fullName", "province__name", "city__name"]
+    filterset_fields = ["province", "city"]
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+    ]
+
+    permission_classes = (permissions.AllowAny,)
+
+    http_method_names = ["get"]

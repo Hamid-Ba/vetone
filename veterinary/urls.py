@@ -36,4 +36,9 @@ urlpatterns = [
         AnimalListAPI.as_view(),
         name="animals",
     ),
+    path(
+        "search_veterinarian/",
+        SearchVeterinarianAPI.as_view(),
+        name="search_veterinarian",
+    ),
 ]

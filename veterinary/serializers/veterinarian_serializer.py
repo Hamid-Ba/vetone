@@ -18,6 +18,14 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
         ]
 
 
+class VeterinarianSerializer(serializers.ModelSerializer):
+    """Veterinarian Serializer"""
+
+    class Meta:
+        model = Veterinarian
+        fields = "__all__"
+
+
 class MedicalCenterSerializer(serializers.ModelSerializer):
     """Medical Center Serializer"""
 
