@@ -34,6 +34,7 @@ urlpatterns = [
     path("veterinary/", include("veterinary.urls")),
     path("blog/", include("blog.urls")),
     path("province/", include("province.urls")),
+    path("siteinfo/", include("siteinfo.urls")),
     path("wallet/", include("wallet.urls")),
     path("zarinpal/", include("zarinpal.urls")),
 ]

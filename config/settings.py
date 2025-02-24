@@ -52,7 +52,7 @@ VETONE_APPS = [
     "veterinary.apps.VeterinaryConfig",
     "gallery",
     "wallet",
-    "zarinpal.apps.ZarinpalConfig",
+    "siteinfo" "zarinpal.apps.ZarinpalConfig",
 ]
 
 THIRD_PARTY_APPS = [
