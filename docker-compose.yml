@@ -9,7 +9,17 @@ services:
       - vetone_back
 
   redis:
-    image: "redis:latest"
+    restart: unless-stopped
+    image: redis:7.4.0-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    expose:
+      - "6379"
+    environment:
+      - TZ=Asia/Tehran
     networks:
       - vetone_back
 
