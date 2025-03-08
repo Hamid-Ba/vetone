@@ -221,6 +221,7 @@ PHONE_SUPPORT = "02191035274"
 
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+REDIS_CACHE = os.getenv("REDIS_CACHE")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
@@ -235,7 +236,7 @@ if IS_TEST:
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": REDIS_CACHE,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },

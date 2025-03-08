@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+  db:
+    image: "python:3.9"
+    command: ["python", "-c", "import os; os.makedirs('/db', exist_ok=True); open('/db/db.sqlite3', 'a').close();"]
+    volumes:
+      - db_data:/db
+    networks:
+      - vetone_back
+
+  redis:
+    image: "redis:latest"
+    networks:
+      - vetone_back
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Tehran
+    networks:
+      - vetone_back
+
+  celery_worker:
+    build: .
+    command: celery -A config worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Tehran
+    networks:
+      - vetone_back
+      
+  celery_beat:
+    build: .
+    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    depends_on:
+      - celery_worker
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Tehran
+    restart: unless-stopped
+    networks:
+      - vetone_back
+
+volumes:
+  db_data:
+
+networks:
+  vetone_back:
