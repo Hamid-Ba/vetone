@@ -15,7 +15,10 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py migrate --no-input &&
+       python manage.py collectstatic --no-input &&
+       gunicorn --bind 0.0.0.0:8000 --forwarded-allow-ips='*' --access-logfile - --workers 3 --timeout 120 config.wsgi:application"
     volumes:
       - .:/app
     ports:
@@ -32,7 +35,7 @@ services:
 
   celery_worker:
     build: .
-    command: celery -A config worker -l info
+    command: celery -A config worker --loglevel=info
     volumes:
       - .:/app
     depends_on:
@@ -44,7 +47,7 @@ services:
       - TZ=Asia/Tehran
     networks:
       - vetone_back
-      
+
   celery_beat:
     build: .
     command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
