@@ -29,11 +29,14 @@ class CitySerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     """Address Serializer"""
 
-    city = CitySerializer(many=False)
-
     class Meta:
         """Meta Class"""
 
         model = Address
         fields = "__all__"
         read_only_fields = ["user"]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["city"] = instance.city.name
+        return rep

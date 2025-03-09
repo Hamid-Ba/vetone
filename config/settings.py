@@ -13,8 +13,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
-from decouple import config, Csv
+from decouple import config
+from dotenv import load_dotenv
 from dj_database_url import parse as db_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,13 +30,13 @@ SITE = {"front": {"protocol": "https", "url": "vetone.ir"}}
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config(
+SECRET_KEY = os.getenv(
     "SECRET_KEY",
     default="django-insecure-1aexmk-ef)_)(^grkc$4_6azv^lbkv*jzvrd%9zk+rl=y0(er8",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = os.getenv("DEBUG", default=True)
 
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 ALLOWED_HOSTS = ["*"]
@@ -80,9 +83,7 @@ INSTALLED_APPS = (
     + THIRD_PARTY_APPS
     + VETONE_APPS
 )
-CSRF_TRUSTED_ORIGINS = config(
-    "CSRF_TRUSTED_ORIGINS", default=["http://*.127.0.0.1"], cast=Csv()
-)
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", default=["http://*.127.0.0.1"])
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -158,7 +159,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = config("TIME_ZONE", default="Asia/Tehran")
+TIME_ZONE = os.getenv("TIME_ZONE", default="Asia/Tehran")
 
 USE_I18N = True
 
@@ -207,9 +208,10 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-KAVENEGAR_API_KEY = config("KAVENEGAR_API_KEY")
 
-MERCHANT_ID = config("MERCHANT_ID")
+KAVENEGAR_API_KEY = os.getenv("KAVENEGAR_API_KEY")
+
+MERCHANT_ID = os.getenv("MERCHANT_ID")
 
 VERIFY_URL = "https://api.vetone.ir/zarinpal/verify_transaction/"
 FRONT_VERIFY = "https://vetone.ir/payment/verify/"
@@ -218,13 +220,13 @@ ACADEMY_URL = "https://vetone.ir/academy"
 PHONE_SUPPORT = "02191035274"
 
 
-CELERY_BROKER_URL = config("CELERY_BROKER_URL")
-REDIS_CACHE = config("REDIS_CACHE")
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+REDIS_CACHE = os.getenv("REDIS_CACHE")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
-IS_TEST = config("IS_TEST", default=False, cast=bool)
+IS_TEST = os.getenv("IS_TEST", default=False)
 
 if IS_TEST:
     CELERY_TASK_ALWAYS_EAGER = True  # Executes tasks synchronously
