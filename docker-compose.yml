@@ -50,7 +50,6 @@ services:
     command: celery -A config worker --loglevel=info
     volumes:
       - .:/app
-      - db_data:/db
     depends_on:
       - redis
       - web
@@ -64,8 +63,6 @@ services:
   celery_beat:
     build: .
     command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - db_data:/db
     depends_on:
       - celery_worker
     env_file:
@@ -79,8 +76,6 @@ services:
   flower:
     build: .
     command: celery -A config flower --port=5555 --basic_auth="vetone:vetone" 
-    volumes:
-      - db_data:/db
     ports:
       - 5555:5555
     depends_on:
@@ -92,9 +87,6 @@ services:
     restart: unless-stopped
     networks:
       - vetone_back
-
-volumes:
-  db_data:
 
 networks:
   vetone_back:
