@@ -36,7 +36,8 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", default=True)
+DEBUG = config('DEBUG', cast=bool)
+print(f"DEBUG IS ********* {DEBUG}")
 
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 ALLOWED_HOSTS = ["*"]
@@ -226,8 +227,7 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
-IS_TEST = os.getenv("IS_TEST", default=False)
-
+IS_TEST = config('IS_TEST', cast=bool)
 if IS_TEST:
     CELERY_TASK_ALWAYS_EAGER = True  # Executes tasks synchronously
     CELERY_TASK_EAGER_PROPAGATES = True  # Propagates exceptions
