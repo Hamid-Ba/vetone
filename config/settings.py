@@ -37,7 +37,6 @@ SECRET_KEY = os.getenv(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
-print(f"DEBUG IS ********* {DEBUG}")
 
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 ALLOWED_HOSTS = ["*"]
