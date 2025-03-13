@@ -1,11 +1,15 @@
-from django.urls import path
-
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import *
 
 app_name = "veterinary"
 
+router = DefaultRouter()
+router.register(r"requests", RequestAPI)
 
 urlpatterns = [
+    path("", include(router.urls)),
+    path("request/", CreateRequestAPI.as_view(), name="create_request"),
     path(
         "register_veterinarian/",
         RegisterVeterinarianAPI.as_view(),
