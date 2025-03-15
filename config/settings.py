@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
-from decouple import config
+from decouple import Csv, config
 from dotenv import load_dotenv
 from dj_database_url import parse as db_url
 
@@ -83,7 +83,7 @@ INSTALLED_APPS = (
     + THIRD_PARTY_APPS
     + VETONE_APPS
 )
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", default=["http://*.127.0.0.1"])
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv())
 
 CORS_ALLOW_ALL_ORIGINS = True
 
