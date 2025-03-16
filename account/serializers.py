@@ -14,6 +14,23 @@ import os
 class UserSerializer(serializers.ModelSerializer):
     """User Serializer"""
 
+    is_rancher = serializers.SerializerMethodField()
+    is_veterinarian = serializers.SerializerMethodField()
+
+    def get_is_rancher(self, obj):
+        try:
+            if obj.rancher:
+                return True
+        except:
+            return False
+
+    def get_is_veterinarian(self, obj):
+        try:
+            if obj.veterinarian:
+                return True
+        except:
+            return False
+
     class Meta:
         """Meta Class"""
 
@@ -26,6 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
             "is_staff",
             "is_superuser",
             "last_login",
+            "is_rancher",
+            "is_veterinarian",
             "password",
             "groups",
             "user_permissions",
@@ -40,6 +59,8 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "last_login",
             "password",
+            "is_rancher",
+            "is_veterinarian",
         ]
 
 

@@ -19,7 +19,7 @@ class Rancher(BaseModel):
     image = models.ImageField(null=True, blank=True, upload_to=rancher_image_file_path)
 
     veterinarians = models.ManyToManyField(
-        "veterinary.Veterinarian", related_name="ranchers"
+        "veterinary.Veterinarian", blank=True, related_name="ranchers"
     )
 
     user = models.OneToOneField(
