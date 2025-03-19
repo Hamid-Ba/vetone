@@ -16,8 +16,6 @@ def rancher_image_file_path(instance, filename):
 class Rancher(BaseModel):
     """Rancher Model"""
 
-    image = models.ImageField(null=True, blank=True, upload_to=rancher_image_file_path)
-
     veterinarians = models.ManyToManyField(
         "veterinary.Veterinarian", blank=True, related_name="ranchers"
     )

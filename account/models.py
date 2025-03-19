@@ -1,6 +1,8 @@
 """
 Account Module Models
 """
+import os
+from uuid import uuid4
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -9,6 +11,14 @@ from django.contrib.auth.models import (
 )
 
 from account.vaidators import phone_validator
+
+
+def image_file_path(instance, filename):
+    """Generate file path for  image"""
+    ext = os.path.splitext(filename)[1]
+    filename = f"{uuid4()}.{ext}"
+
+    return os.path.join("uploads", "images", filename)
 
 
 class UserManager(BaseUserManager):
@@ -47,6 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     fullName = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+
+    image = models.ImageField(null=True, blank=True, upload_to=image_file_path)
 
     USERNAME_FIELD = "phone"
 

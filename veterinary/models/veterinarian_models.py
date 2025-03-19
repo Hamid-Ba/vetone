@@ -61,10 +61,6 @@ class Veterinarian(BaseModel):
         max_length=1, default=WorkStatus.Busy, choices=WorkStatus.choices
     )
 
-    image = models.ImageField(
-        null=True, blank=True, upload_to=veterinarian_image_file_path
-    )
-
     background_image = models.ImageField(
         null=True, blank=True, upload_to=veterinarian_image_file_path
     )
