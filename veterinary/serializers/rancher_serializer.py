@@ -29,7 +29,7 @@ class RancherVeterinarianSerializer(serializers.Serializer):
 
     def get_image(self, obj):
         try:
-            return obj.image.path
+            return obj.user.image.path
         except:
             return "-"
 
