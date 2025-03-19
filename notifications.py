@@ -59,7 +59,7 @@ class KavenegarSMS:
     def register(self, receptor=None, code=None, password=None):
         self.params = {
             "receptor": receptor,
-            "template": "starbot-register",
+            "template": "otp",
             "token": code,
             "type": "sms",
         }
