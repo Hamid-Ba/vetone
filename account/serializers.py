@@ -98,7 +98,7 @@ class AuthenticationSerializer(serializers.Serializer):
         if not IS_TEST:
             try:
                 kavenegar = KavenegarSMS()
-                kavenegar.otp(user.phone, otp)
+                kavenegar.register(user.phone, otp)
                 kavenegar.send()
             except Exception as e:
                 CodeLog.log_error("account - serializers.py", "def create", str(e))
