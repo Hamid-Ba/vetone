@@ -226,6 +226,8 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
+BACK_URL=config("BACK_URL")
+
 IS_TEST = config("IS_TEST", cast=bool)
 if IS_TEST:
     CELERY_TASK_ALWAYS_EAGER = True  # Executes tasks synchronously
