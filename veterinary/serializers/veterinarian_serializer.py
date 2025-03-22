@@ -6,6 +6,13 @@ from ..models import Veterinarian, MedicalCenter
 class RegisterVeterinarianSerializer(serializers.ModelSerializer):
     """Register Veterinarian Serializer"""
 
+    fullName = serializers.CharField(
+        write_only=True, required=False
+    )  # To update User fullName
+    image = serializers.ImageField(
+        write_only=True, required=False
+    )  # To update User image
+
     class Meta:
         model = Veterinarian
         fields = [
@@ -15,7 +22,14 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
             "national_id_image",
             "issuance_date",
             "medical_center",
+            "province",
+            "city",
+            "slug",
+            "image",
+            "fullName",
         ]
+
+        read_only_fields = ["slug"]
 
 
 class VeterinarianSerializer(serializers.ModelSerializer):

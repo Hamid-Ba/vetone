@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from django.utils.text import slugify
 from drf_spectacular.utils import extend_schema
 from rest_framework import (
     views,
@@ -28,7 +29,26 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         """Register Veterinarian"""
-        return serializer.save(user=self.request.user)
+        user = self.request.user
+
+        # Get fullName and image from request data
+        fullName = serializer.validated_data.get("fullName")
+        image = serializer.validated_data.get("image")
+
+        # If User's fullName is empty, update it
+        if not user.fullName and fullName:
+            user.fullName = fullName
+            user.save(update_fields=["fullName"])
+
+        # If User's image is empty, update it
+        if not user.image and image:
+            user.image = image
+            user.save(update_fields=["image"])
+
+        # Set slug: Use updated fullName if available, otherwise use phone
+        slug = slugify(user.fullName) if user.fullName else slugify(user.phone)
+
+        return serializer.save(user=user, slug=slug)
 
 
 class MedicalCenterListAPI(generics.ListAPIView):

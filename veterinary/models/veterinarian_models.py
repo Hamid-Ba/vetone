@@ -42,6 +42,7 @@ class Veterinarian(BaseModel):
         Test1 = "1", "Test1"
         Test2 = "2", "Test2"
 
+    slug = models.SlugField(null=False, blank=False)
     clinic_name = models.CharField(max_length=225, null=False, blank=False)
     medical_license = models.CharField(max_length=72, null=False, blank=False)
     license_type = models.CharField(
