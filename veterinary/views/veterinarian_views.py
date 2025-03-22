@@ -13,7 +13,7 @@ from rest_framework import (
 from config.pagination import StandardPagination
 from monitoring.models.observability import CodeLog
 
-from ..services import rancher_services
+from ..services import rancher_services, veterinarian_services
 from ..filters import VeterinarianFilter
 from ..models import Veterinarian, MedicalCenter, Rancher
 from ..serializers import veterinarian_serializer, rancher_serializer, serializers
@@ -32,8 +32,8 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
         user = self.request.user
 
         # Get fullName and image from request data
-        fullName = serializer.validated_data.get("fullName")
-        image = serializer.validated_data.get("image")
+        fullName = serializer.validated_data.pop("fullName")
+        image = serializer.validated_data.pop("image")
 
         # If User's fullName is empty, update it
         if not user.fullName and fullName:
@@ -47,6 +47,14 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
 
         # Set slug: Use updated fullName if available, otherwise use phone
         slug = slugify(user.fullName) if user.fullName else slugify(user.phone)
+
+        veterinarian_services.add_veterinarian_address(
+            user=user,
+            street=serializer.validated_data.pop("street"),
+            clinic_name=serializer.validated_data.pop("clinic_name"),
+            latitude=serializer.validated_data.pop("latitude"),
+            longitude=serializer.validated_data.pop("longitude"),
+        )
 
         return serializer.save(user=user, slug=slug)
 
@@ -82,8 +90,8 @@ class AddRancherAPI(views.APIView):
 
         fullName = serializers.CharField(required=True)
         phone = serializers.CharField(required=True)
-        village_name = serializers.CharField(required=True)
-        city_id = serializers.IntegerField(required=True)
+        latitude = serializers.CharField(required=True)
+        longitude = serializers.CharField(required=True)
 
     @extend_schema(
         request=AddRancherInputSerializer,

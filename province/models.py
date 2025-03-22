@@ -42,7 +42,7 @@ class Address(BaseModel):
     street = models.CharField(
         max_length=255, blank=False, null=False, default="لطفا پر کنید"
     )
-    city = models.ForeignKey(City, null=False, blank=False, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, null=True, blank=True, on_delete=models.SET_NULL)
 
     latitude = models.CharField(max_length=125, blank=True, null=True)
     longitude = models.CharField(max_length=125, blank=True, null=True)

@@ -6,12 +6,15 @@ from ..models import Veterinarian, MedicalCenter
 class RegisterVeterinarianSerializer(serializers.ModelSerializer):
     """Register Veterinarian Serializer"""
 
-    fullName = serializers.CharField(
-        write_only=True, required=False
-    )  # To update User fullName
-    image = serializers.ImageField(
-        write_only=True, required=False
-    )  # To update User image
+    # Address Field
+    street = serializers.CharField(write_only=True, required=True)
+    clinic_name = serializers.CharField(write_only=True, required=False)
+    latitude = serializers.CharField(write_only=True, required=False)
+    longitude = serializers.CharField(write_only=True, required=False)
+
+    # User Field
+    fullName = serializers.CharField(write_only=True, required=False)
+    image = serializers.ImageField(write_only=True, required=False)
 
     class Meta:
         model = Veterinarian
@@ -22,9 +25,15 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
             "national_id_image",
             "issuance_date",
             "medical_center",
+            "slug",
+            # Address Field
             "province",
             "city",
-            "slug",
+            "street",
+            "clinic_name",
+            "latitude",
+            "longitude",
+            # User Field
             "image",
             "fullName",
         ]

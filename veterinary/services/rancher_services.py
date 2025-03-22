@@ -6,7 +6,7 @@ from province.models import Address
 
 
 @transaction.atomic
-def add_rancher(*, veterinarian_user, fullName, phone, village_name, city_id):
+def add_rancher(*, veterinarian_user, fullName, phone, latitude, longitude):
     """Add Rancher Service"""
     veterinarian = Veterinarian.objects.get(user=veterinarian_user)
 
@@ -17,7 +17,7 @@ def add_rancher(*, veterinarian_user, fullName, phone, village_name, city_id):
     rancher = Rancher.objects.get(user=user)
     rancher.veterinarians.add(veterinarian)
 
-    Address.objects.create(user=user, village_name=village_name, city_id=city_id)
+    Address.objects.create(user=user, latitude=latitude, longitude=longitude)
 
     return rancher
 

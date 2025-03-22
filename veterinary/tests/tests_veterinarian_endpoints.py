@@ -74,6 +74,12 @@ class PrivateTest(TestCase):
             "medical_license": "09338973928",
             "issuance_date": date.today(),
             "medical_center": self.medical_center.id,
+            "street": "test",
+            "clinic_name": "test",
+            "latitude": "2",
+            "longitude": "1",
+            "fullName": "test",
+            "image": self._generate_test_image(),
         }
 
         self.assertTrue(Rancher.objects.filter(user=self.user).exists())
@@ -82,9 +88,14 @@ class PrivateTest(TestCase):
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         veter = Veterinarian.objects.first()
+        veter_address = Address.objects.get(user=veter.user)
 
         self.assertEqual(veter.user, self.user)
         self.assertFalse(Rancher.objects.filter(user=self.user).exists())
+        self.assertEqual(veter_address.street, payload["street"])
+        self.assertEqual(veter_address.clinic_name, payload["clinic_name"])
+        self.assertEqual(veter_address.latitude, payload["latitude"])
+        self.assertEqual(veter_address.longitude, payload["longitude"])
 
         if veter.license_image:
             self.uploaded_files.append(veter.license_image.path)
@@ -93,15 +104,13 @@ class PrivateTest(TestCase):
 
     def test_add_rancher_should_work_properly(self):
         """Test Add Rancher"""
-        province = baker.make("province.Province")
-        city = baker.make("province.City", province=province)
         baker.make(Veterinarian, user=self.user)
 
         payload = {
             "fullName": "test",
             "phone": "09151498721",
-            "village_name": "test",
-            "city_id": city.id,
+            "latitude": "2",
+            "longitude": "1",
         }
 
         res = self.client.post(ADD_RANCHER_URL, payload)
@@ -113,8 +122,8 @@ class PrivateTest(TestCase):
         self.assertEqual(rancher.user.fullName, payload["fullName"])
         self.assertEqual(rancher.veterinarians.first().user, self.user)
 
-        self.assertEqual(rancher_address.city, city)
-        self.assertEqual(rancher_address.village_name, payload["village_name"])
+        self.assertEqual(rancher_address.latitude, payload["latitude"])
+        self.assertEqual(rancher_address.longitude, payload["longitude"])
 
     def test_get_list_of_veterinarian_ranchers_api(self):
         """Test Get List Of Veterinarian Rancher"""
