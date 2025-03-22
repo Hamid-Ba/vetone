@@ -59,6 +59,18 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
         return serializer.save(user=user, slug=slug)
 
 
+class VeterinarianAPI(generics.RetrieveUpdateAPIView):
+    """Retrieve, Update (PUT/PATCH) Veterinarian API"""
+
+    serializer_class = veterinarian_serializer.VeterinarianSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get_object(self):
+        """Return the veterinarian linked to the logged-in user"""
+        return self.request.user.veterinarian
+
+
 class MedicalCenterListAPI(generics.ListAPIView):
     """Medical Center List API"""
 

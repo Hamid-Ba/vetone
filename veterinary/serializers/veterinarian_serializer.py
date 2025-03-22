@@ -44,9 +44,14 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
 class VeterinarianSerializer(serializers.ModelSerializer):
     """Veterinarian Serializer"""
 
+    fullName = serializers.CharField(source="user.fullName", read_only=True)
+    phone = serializers.CharField(source="user.phone", read_only=True)
+    image = serializers.ImageField(source="user.image", read_only=True)
+
     class Meta:
         model = Veterinarian
         fields = "__all__"
+        read_only_fields = ["slug", "rate", "user"]
 
 
 class MedicalCenterSerializer(serializers.ModelSerializer):

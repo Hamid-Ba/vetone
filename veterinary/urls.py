@@ -15,6 +15,7 @@ urlpatterns = [
         RegisterVeterinarianAPI.as_view(),
         name="register_veterinarian",
     ),
+    path("me/", VeterinarianAPI.as_view(), name="veterinarian-me"),
     path(
         "centers/",
         MedicalCenterListAPI.as_view(),
