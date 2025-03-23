@@ -40,7 +40,7 @@ class RancherVeterinarianSerializer(serializers.Serializer):
         address = obj.user.addresses.first()
 
         if address:
-            return f"{address.province.name} - {address.city.name}"
+            return f"{address.latitude} - {address.longitude}"
         else:
             return "-"
 

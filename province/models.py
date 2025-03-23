@@ -69,7 +69,7 @@ class Address(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.user.phone} - {self.city.name} - {self.street}"
+        return f"{self.user.phone} -  {self.street}"
 
     class Meta:
         verbose_name_plural = "Addresses"
