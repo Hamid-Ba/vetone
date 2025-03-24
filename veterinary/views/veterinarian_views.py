@@ -125,12 +125,18 @@ class AddRancherAPI(views.APIView):
         input_data = self.AddRancherInputSerializer(data=self.request.data, many=False)
         input_data.is_valid(raise_exception=True)
 
-        if Rancher.objects.filter(user__phone=input_data.data["phone"]).exists():
+        rancher = Rancher.objects.filter(user__phone=input_data.data["phone"]).first()
+
+        if rancher and rancher.veterinarians.contains(self.request.user.veterinarian):
             return response.Response(
                 {"message": "Rancher has been added already!"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if rancher:
+            rancher = rancher_services.add_veterinarian_to_rancher(
+                veterinarian_user=self.request.user, rancher=rancher
+            )
         try:
             rancher = rancher_services.add_rancher(
                 veterinarian_user=self.request.user, **input_data.data

@@ -22,6 +22,15 @@ def add_rancher(*, veterinarian_user, fullName, phone, latitude, longitude):
     return rancher
 
 
+@transaction.atomic
+def add_veterinarian_to_rancher(*, veterinarian_user, rancher):
+    """Add Rancher Service"""
+    veterinarian = Veterinarian.objects.get(user=veterinarian_user)
+    rancher.veterinarians.add(veterinarian)
+
+    return rancher
+
+
 def remove_rancher(*, veterinarian_user: User, rancher: Rancher):
     """Remove Rancher"""
     try:

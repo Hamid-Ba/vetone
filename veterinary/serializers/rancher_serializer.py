@@ -26,6 +26,8 @@ class RancherVeterinarianSerializer(serializers.Serializer):
     phone = serializers.SerializerMethodField()
     fullName = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
+    latitude = serializers.SerializerMethodField()
+    longitude = serializers.SerializerMethodField()
 
     def get_image(self, obj):
         try:
@@ -44,8 +46,24 @@ class RancherVeterinarianSerializer(serializers.Serializer):
         else:
             return "-"
 
+    def get_latitude(self, obj):
+        address = obj.user.addresses.first()
+
+        if address:
+            return f"{address.latitude}"
+        else:
+            return "-"
+
+    def get_longitude(self, obj):
+        address = obj.user.addresses.first()
+
+        if address:
+            return f"{address.longitude}"
+        else:
+            return "-"
+
     def get_fullName(self, obj):
         return obj.user.fullName
 
     class Meta:
-        fields = ["image", "phone", "fullName", "address"]
+        fields = ["image", "phone", "fullName", "address", "latitude", "longitude"]
