@@ -10,6 +10,8 @@ from monitoring.models.observability import CodeLog
 from notifications import KavenegarSMS
 import os
 
+from province.serializers import AddressSerializer
+
 
 class UserSerializer(serializers.ModelSerializer):
     """User Serializer"""
@@ -138,3 +140,45 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs["user"] = user
         return attrs
+
+
+class UserAddressSerializer(serializers.ModelSerializer):
+
+    addresses = AddressSerializer(many=True)
+    is_rancher = serializers.SerializerMethodField()
+    is_veterinarian = serializers.SerializerMethodField()
+
+    def get_is_rancher(self, obj):
+        try:
+            if obj.rancher:
+                return True
+        except:
+            return False
+
+    def get_is_veterinarian(self, obj):
+        try:
+            if obj.veterinarian:
+                return True
+        except:
+            return False
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "id",
+            "fullName",
+            "phone",
+            "is_active",
+            "is_rancher",
+            "is_veterinarian",
+            "addresses",
+        ]
+        read_only_fields = [
+            "id",
+            "fullName",
+            "phone",
+            "is_active",
+            "is_rancher",
+            "is_veterinarian",
+            "addresses",
+        ]

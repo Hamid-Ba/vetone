@@ -18,4 +18,5 @@ urlpatterns = [
     path("logout/", views.LogoutView.as_view(), name="logout"),
     path("token/", views.AuthTokenView.as_view(), name="token"),
     path("me/", views.UserView.as_view(), name="me"),
+    path("addresses/<int:pk>", views.UserAddressesAPI.as_view(), name="addresses"),
 ]

@@ -38,5 +38,6 @@ class AddressSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["city"] = instance.city.name
+        if instance.city:
+            rep["city"] = instance.city.name
         return rep

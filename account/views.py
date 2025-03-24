@@ -3,7 +3,7 @@ Account Module Views
 """
 from rest_framework import generics, permissions, authentication, views
 from rest_framework.authtoken.views import ObtainAuthToken
-from django.contrib.auth import logout
+from django.contrib.auth import get_user_model, logout
 
 
 from rest_framework.response import Response
@@ -11,6 +11,7 @@ from account.serializers import (
     AuthenticationSerializer,
     AuthTokenSerializer,
     UserSerializer,
+    UserAddressSerializer,
 )
 
 
@@ -52,3 +53,10 @@ class UserView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         """Retrieve The Authorized User"""
         return self.request.user
+
+
+class UserAddressesAPI(generics.RetrieveAPIView):
+    """Retrieve User Addresses"""
+
+    queryset = get_user_model().objects.filter(is_active=True)
+    serializer_class = UserAddressSerializer
