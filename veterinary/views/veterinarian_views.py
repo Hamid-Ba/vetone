@@ -66,6 +66,11 @@ class VeterinarianAPI(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
 
+    def get_serializer_class(self):
+        if self.request.method in ["PUT", "PATCH"]:
+            return veterinarian_serializer.UpdateVeterinarianSerializer
+        return veterinarian_serializer.VeterinarianSerializer
+
     def get_object(self):
         """Return the veterinarian linked to the logged-in user"""
         return self.request.user.veterinarian

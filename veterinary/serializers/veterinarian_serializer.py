@@ -41,7 +41,7 @@ class RegisterVeterinarianSerializer(serializers.ModelSerializer):
         read_only_fields = ["slug"]
 
 
-class VeterinarianSerializer(serializers.ModelSerializer):
+class UpdateVeterinarianSerializer(serializers.ModelSerializer):
     """Veterinarian Serializer"""
 
     fullName = serializers.CharField(source="user.fullName", read_only=True)
@@ -52,6 +52,26 @@ class VeterinarianSerializer(serializers.ModelSerializer):
         model = Veterinarian
         fields = "__all__"
         read_only_fields = ["slug", "rate", "user"]
+
+
+class VeterinarianSerializer(UpdateVeterinarianSerializer):
+    """Update Veterinarian Serializer"""
+
+    city = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
+
+    def get_city(self, obj):
+        if obj.city:
+            return obj.city.name
+        return "-"
+
+    def get_province(self, obj):
+        if obj.province:
+            return obj.province.name
+        return "-"
+
+    class Meta(UpdateVeterinarianSerializer.Meta):
+        pass
 
 
 class MedicalCenterSerializer(serializers.ModelSerializer):
