@@ -71,6 +71,13 @@ class VeterinarianAPI(generics.RetrieveUpdateAPIView):
         return self.request.user.veterinarian
 
 
+class GetVeterinarianAPI(generics.RetrieveAPIView):
+    """Retrieve, Update (PUT/PATCH) Veterinarian API"""
+
+    queryset = Veterinarian.objects.filter(is_active=True)
+    serializer_class = veterinarian_serializer.VeterinarianSerializer
+
+
 class MedicalCenterListAPI(generics.ListAPIView):
     """Medical Center List API"""
 

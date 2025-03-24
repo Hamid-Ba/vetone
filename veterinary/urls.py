@@ -16,6 +16,7 @@ urlpatterns = [
         name="register_veterinarian",
     ),
     path("me/", VeterinarianAPI.as_view(), name="veterinarian-me"),
+    path("<int:pk>", GetVeterinarianAPI.as_view(), name="get-veterinarian"),
     path(
         "centers/",
         MedicalCenterListAPI.as_view(),
