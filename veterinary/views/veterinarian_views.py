@@ -27,13 +27,44 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
 
+    def create(self, request, *args, **kwargs):
+        user = self.request.user
+
+        veter = Veterinarian.objects.filter(user=user).first()
+
+        if veter:
+            return response.Response(
+                {"message": "Veter has been added already!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Get fullName and image from request data
+        fullName = self.request.data.pop("fullName", None)
+        image = self.request.data.pop("image", None)
+
+        # If User's fullName is empty, update it
+        if not user.fullName and not fullName:
+            return response.Response(
+                {"message": "نام کامل خود را وارد کنید"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # If User's image is empty, update it
+        if not user.image and not image:
+            return response.Response(
+                {"message": "تصویر خود را وارد کنید"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return super().create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         """Register Veterinarian"""
         user = self.request.user
 
         # Get fullName and image from request data
-        fullName = serializer.validated_data.pop("fullName")
-        image = serializer.validated_data.pop("image")
+        fullName = serializer.validated_data.pop("fullName", None)
+        image = serializer.validated_data.pop("image", None)
 
         # If User's fullName is empty, update it
         if not user.fullName and fullName:
@@ -50,10 +81,10 @@ class RegisterVeterinarianAPI(generics.CreateAPIView):
 
         veterinarian_services.add_veterinarian_address(
             user=user,
-            street=serializer.validated_data.pop("street"),
-            clinic_name=serializer.validated_data.pop("clinic_name"),
-            latitude=serializer.validated_data.pop("latitude"),
-            longitude=serializer.validated_data.pop("longitude"),
+            street=serializer.validated_data.pop("street", None),
+            clinic_name=serializer.validated_data.pop("clinic_name", None),
+            latitude=serializer.validated_data.pop("latitude", None),
+            longitude=serializer.validated_data.pop("longitude", None),
         )
 
         return serializer.save(user=user, slug=slug)

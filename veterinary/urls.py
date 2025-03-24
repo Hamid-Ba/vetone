@@ -28,7 +28,7 @@ urlpatterns = [
         name="add_rancher",
     ),
     path(
-        "ranchers",
+        "ranchers/",
         RancherListAPI.as_view(),
         name="ranchers",
     ),
