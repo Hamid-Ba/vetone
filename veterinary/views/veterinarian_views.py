@@ -81,6 +81,7 @@ class GetVeterinarianAPI(generics.RetrieveAPIView):
 
     queryset = Veterinarian.objects.filter(is_active=True)
     serializer_class = veterinarian_serializer.VeterinarianSerializer
+    lookup_field = "slug"
 
 
 class MedicalCenterListAPI(generics.ListAPIView):
