@@ -28,15 +28,37 @@ class VeterinarianSearchTestCase(TestCase):
         self.user_3 = baker.make(
             "account.User", phone="09151498724", fullName="Ali Riki"
         )
+        self.user_4 = baker.make(
+            "account.User", phone="09151498725", fullName="Iman Samani"
+        )
 
         self.veterinarian_1 = baker.make(
-            Veterinarian, user=self.user_1, province=self.province_1, city=self.city_1
+            Veterinarian,
+            user=self.user_1,
+            province=self.province_1,
+            city=self.city_1,
+            state="C",
         )
         self.veterinarian_2 = baker.make(
-            Veterinarian, user=self.user_2, province=self.province_1, city=self.city_1
+            Veterinarian,
+            user=self.user_2,
+            province=self.province_1,
+            city=self.city_1,
+            state="C",
         )
         self.veterinarian_3 = baker.make(
-            Veterinarian, user=self.user_3, province=self.province_2, city=self.city_2
+            Veterinarian,
+            user=self.user_3,
+            province=self.province_2,
+            city=self.city_2,
+            state="C",
+        )
+        self.veterinarian_4 = baker.make(
+            Veterinarian,
+            user=self.user_4,
+            province=self.province_1,
+            city=self.city_1,
+            state="P",
         )
 
     def test_search_by_fullName(self):
@@ -52,9 +74,13 @@ class VeterinarianSearchTestCase(TestCase):
         response = self.client.get(url, {"province": self.province_1.id})
         res_json_res = response.json()["results"]
 
-        len_veters = Veterinarian.objects.filter(
-            province__id=self.province_1.id
-        ).count()
+        len_veters = (
+            Veterinarian.objects.get_confirmed_veters()
+            .filter(
+                province__id=self.province_1.id,
+            )
+            .count()
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res_json_res), len_veters)  # Only one product matches
@@ -64,7 +90,11 @@ class VeterinarianSearchTestCase(TestCase):
         response = self.client.get(url, {"city": self.city_1.id})
         res_json_res = response.json()["results"]
 
-        len_veters = Veterinarian.objects.filter(city__id=self.city_1.id).count()
+        len_veters = (
+            Veterinarian.objects.get_confirmed_veters()
+            .filter(city__id=self.city_1.id)
+            .count()
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res_json_res), len_veters)  # Only one product matches

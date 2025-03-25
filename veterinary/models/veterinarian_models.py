@@ -3,6 +3,7 @@ from uuid import uuid4
 from django.db import models
 
 from common.models import BaseModel
+from notifications import KavenegarSMS
 
 
 def veterinarian_image_file_path(instance, filename):
@@ -31,6 +32,32 @@ class MedicalCenter(BaseModel):
         return self.title
 
 
+class VeterinarianManager(models.Manager):
+    """Veterinarian Manager"""
+
+    def get_confirmed_veters(self):
+        """Returns a list of Veterinarian that have been confirmed"""
+        return self.filter(state="C", is_active=True).values()
+
+    def fill_unique_code(self, veterinarian_id):
+        """Change Veterinarian State to Confirmed"""
+        veterinarian = self.filter(id=veterinarian_id).get()
+        if veterinarian.state == "C":
+            if not veterinarian.code:
+                veterinarian.code = str(10000 + veterinarian_id)
+                # veterinarian.charge_veterinarian(days=31, is_first=True)
+                veterinarian.save()
+
+                IS_TEST = os.getenv("IS_TEST", default=False)
+                if not IS_TEST:
+                    # Send Confirm SMS
+                    kavenegar = KavenegarSMS()
+                    kavenegar.confirm(veterinarian.user.phone, veterinarian.code)
+                    kavenegar.send()
+
+        return veterinarian
+
+
 class Veterinarian(BaseModel):
     class WorkStatus(models.TextChoices):
         Busy = "B", "Busy"
@@ -41,6 +68,11 @@ class Veterinarian(BaseModel):
     class LicenseType(models.TextChoices):
         Test1 = "1", "Test1"
         Test2 = "2", "Test2"
+
+    class VeterinarianState(models.TextChoices):
+        PENDING = "P", "Pending"
+        CONFIRMED = "C", "Confirmed"
+        REJECTED = "R", "Rejected"
 
     slug = models.SlugField(null=False, blank=False)
     clinic_name = models.CharField(max_length=225, null=False, blank=False)
@@ -70,6 +102,13 @@ class Veterinarian(BaseModel):
     surgery = models.IntegerField(default=0)
     experience = models.IntegerField(default=0)
 
+    code = models.CharField(max_length=5, unique=True, null=True, blank=True)
+    state = models.CharField(
+        max_length=1,
+        default=VeterinarianState.PENDING,
+        choices=VeterinarianState.choices,
+    )
+
     user = models.OneToOneField(
         "account.User",
         on_delete=models.CASCADE,
@@ -97,6 +136,8 @@ class Veterinarian(BaseModel):
         null=True,
         related_name="veterinarians",
     )
+
+    objects = VeterinarianManager()
 
     def __str__(self):
         return f"{self.medical_license} - {self.user.phone}"

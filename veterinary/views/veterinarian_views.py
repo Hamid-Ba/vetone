@@ -110,7 +110,7 @@ class VeterinarianAPI(generics.RetrieveUpdateAPIView):
 class GetVeterinarianAPI(generics.RetrieveAPIView):
     """Retrieve Veterinarian API"""
 
-    queryset = Veterinarian.objects.filter(is_active=True)
+    queryset = Veterinarian.objects.get_confirmed_veters()
     serializer_class = veterinarian_serializer.VeterinarianSerializer
     lookup_field = "slug"
 
@@ -248,7 +248,9 @@ class SearchVeterinarianAPI(generics.ListAPIView):
         •	Filter by brand name: GET /veterinary/?brand=Apple
     """
 
-    queryset = Veterinarian.objects.all().select_related("user", "province", "city")
+    queryset = Veterinarian.objects.filter(state="C", is_active=True).select_related(
+        "user", "province", "city"
+    )
     serializer_class = veterinarian_serializer.VeterinarianSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = VeterinarianFilter

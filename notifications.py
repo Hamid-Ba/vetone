@@ -64,6 +64,22 @@ class KavenegarSMS:
             "type": "sms",
         }
 
+    def confirm(self, receptor=None, code=None):
+        self.params = {
+            "receptor": receptor,
+            "template": "veterinarianconfirm",
+            "token": code,
+            "type": "sms",
+        }
+
+    def reject(self, receptor=None):
+        self.params = {
+            "receptor": receptor,
+            "template": "veterinarianreject",
+            "token": receptor,
+            "type": "sms",
+        }
+
     def check_wallet(self, receptor=None, code=None):
         self.params = {
             "receptor": receptor,

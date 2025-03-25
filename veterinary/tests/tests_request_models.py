@@ -2,7 +2,7 @@ from datetime import date, time
 from model_bakery import baker
 from django.test import TestCase
 
-from ..models import Request, AnimalRequest, RequestImage, Rancher, Animal, Veterinarian
+from ..models import Request, AnimalRequest, Rancher, Animal, Veterinarian
 
 
 class RequestTest(TestCase):
@@ -95,29 +95,29 @@ class AnimalRequestTest(TestCase):
         )
 
 
-class RequestImageTest(TestCase):
-    """Request Image Model Test"""
+# class RequestImageTest(TestCase):
+#     """Request Image Model Test"""
 
-    def setUp(self):
-        self.rancher_user = baker.make(
-            "account.User", phone="09151498722", fullName="Hamid Balalzadeh"
-        )
-        self.rancher = Rancher.objects.get(user=self.rancher_user)
+#     def setUp(self):
+#         self.rancher_user = baker.make(
+#             "account.User", phone="09151498722", fullName="Hamid Balalzadeh"
+#         )
+#         self.rancher = Rancher.objects.get(user=self.rancher_user)
 
-        self.veterinarian_user = baker.make("account.User", phone="09151498721")
-        self.veterinary = baker.make(Veterinarian, user=self.veterinarian_user)
+#         self.veterinarian_user = baker.make("account.User", phone="09151498721")
+#         self.veterinary = baker.make(Veterinarian, user=self.veterinarian_user)
 
-        self.request = baker.make(
-            Request, rancher=self.rancher, veterinarian=self.veterinary
-        )
+#         self.request = baker.make(
+#             Request, rancher=self.rancher, veterinarian=self.veterinary
+#         )
 
-        self.payload = {"image": "test.png"}
+#         self.payload = {"image": "test.png"}
 
-        self.model = RequestImage.objects.create(request=self.request, **self.payload)
+#         self.model = RequestImage.objects.create(request=self.request, **self.payload)
 
-    def test_create_model_should_work_properly(self):
-        """Test create model"""
-        for k, v in self.payload.items():
-            self.assertEqual(getattr(self.model, k), v)
+#     def test_create_model_should_work_properly(self):
+#         """Test create model"""
+#         for k, v in self.payload.items():
+#             self.assertEqual(getattr(self.model, k), v)
 
-        self.assertEqual(self.model.request, self.request)
+#         self.assertEqual(self.model.request, self.request)

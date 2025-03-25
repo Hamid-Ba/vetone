@@ -28,9 +28,9 @@ class RancherAdminModel(admin.ModelAdmin):
 class VeterinarianAdminModel(admin.ModelAdmin):
     """Veterinarian Admin Model"""
 
-    list_display = ["id", "user", "medical_license", "is_active"]
+    list_display = ["id", "code", "user", "medical_license", "state", "is_active"]
     list_display_links = ["id", "medical_license", "user"]
-    list_editable = ["is_active"]
+    list_editable = ["is_active", "state"]
 
 
 class MedicalCenterAdminModel(admin.ModelAdmin):
