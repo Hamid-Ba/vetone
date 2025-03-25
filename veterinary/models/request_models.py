@@ -45,6 +45,7 @@ class Request(BaseModel):
     )
     date = models.DateField(blank=False, null=False)
     time = models.TimeField(blank=True, null=True)
+    image = models.ImageField(null=True, blank=True, upload_to=request_image_file_path)
 
     rancher = models.ForeignKey(
         "veterinary.Rancher",
@@ -92,16 +93,16 @@ class AnimalRequest(BaseModel):
         return f"Request ID: {self.request.id} - {self.animal}"
 
 
-class RequestImage(BaseModel):
-    """Request Image Model"""
+# class RequestImage(BaseModel):
+#     """Request Image Model"""
 
-    image = models.ImageField(
-        null=False, blank=False, upload_to=request_image_file_path
-    )
-    request = models.ForeignKey(
-        Request,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-        related_name="images",
-    )
+#     image = models.ImageField(
+#         null=False, blank=False, upload_to=request_image_file_path
+#     )
+#     request = models.ForeignKey(
+#         Request,
+#         on_delete=models.CASCADE,
+#         null=False,
+#         blank=False,
+#         related_name="images",
+#     )

@@ -3,6 +3,11 @@ from django.contrib import admin
 from .models import *
 
 
+class AnimalRequestInline(admin.TabularInline):
+    model = AnimalRequest
+    extra = 1
+
+
 class AnimalAdminModel(admin.ModelAdmin):
     """Animal Admin Model"""
 
@@ -10,6 +15,7 @@ class AnimalAdminModel(admin.ModelAdmin):
     list_display_links = ["id", "name"]
 
     search_fields = ["name"]
+    inlines = [AnimalRequestInline]
 
 
 class RancherAdminModel(admin.ModelAdmin):
@@ -35,7 +41,16 @@ class MedicalCenterAdminModel(admin.ModelAdmin):
     list_editable = ["is_active"]
 
 
+class RequestAdminModel(admin.ModelAdmin):
+    list_display = ("id", "rancher", "veterinarian", "type", "date", "time")
+    list_filter = ("type", "date")
+    search_fields = ("rancher__user__phone", "veterinarian__user__phone")
+    ordering = ("-created_at",)
+    inlines = [AnimalRequestInline]
+
+
 admin.site.register(Animal, AnimalAdminModel)
+admin.site.register(Request, RequestAdminModel)
 admin.site.register(Rancher, RancherAdminModel)
 admin.site.register(Veterinarian, VeterinarianAdminModel)
 admin.site.register(MedicalCenter, MedicalCenterAdminModel)
