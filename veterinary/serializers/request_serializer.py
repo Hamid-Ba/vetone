@@ -30,7 +30,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "animals",
             "image",
         ]
-        read_only_fields = ["is_active", "created_at"]
+        read_only_fields = ["is_active", "created_at", "rancher"]
 
     def create(self, validated_data):
         animals_data = validated_data.pop("animals", [])
