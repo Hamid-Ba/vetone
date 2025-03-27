@@ -37,7 +37,7 @@ class VeterinarianManager(models.Manager):
 
     def get_confirmed_veters(self):
         """Returns a list of Veterinarian that have been confirmed"""
-        return self.filter(state="C", is_active=True).values()
+        return self.filter(state="C", is_active=True)
 
     def fill_unique_code(self, veterinarian_id):
         """Change Veterinarian State to Confirmed"""

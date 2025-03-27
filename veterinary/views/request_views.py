@@ -1,8 +1,10 @@
 from rest_framework import generics, viewsets, permissions, authentication, mixins
+from rest_framework.parsers import JSONParser, MultiPartParser
 
 from config.pagination import StandardPagination
 from ..models import Request
 from ..serializers import RequestSerializer, CreateRequestSerializer
+import json
 
 
 class CreateRequestAPI(generics.CreateAPIView):
@@ -34,6 +36,6 @@ class RequestAPI(
 
     def get_queryset(self):
         try:
-            return self.queryset.filter(rancher=self.user.rancher)
+            return self.queryset.filter(rancher=self.request.user.rancher)
         except:
-            return self.queryset.filter(veterinarian=self.user.veterinarian)
+            return self.queryset.filter(veterinarian=self.request.user.veterinarian)

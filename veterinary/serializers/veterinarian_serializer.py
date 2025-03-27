@@ -59,6 +59,7 @@ class VeterinarianSerializer(UpdateVeterinarianSerializer):
 
     city = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
+    medical_center = serializers.SerializerMethodField()
 
     def get_city(self, obj):
         if obj.city:
@@ -68,6 +69,11 @@ class VeterinarianSerializer(UpdateVeterinarianSerializer):
     def get_province(self, obj):
         if obj.province:
             return obj.province.name
+        return "-"
+
+    def get_medical_center(self, obj):
+        if obj.medical_center:
+            return obj.medical_center.title
         return "-"
 
     class Meta(UpdateVeterinarianSerializer.Meta):

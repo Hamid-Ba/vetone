@@ -16,7 +16,6 @@ urlpatterns = [
         name="register_veterinarian",
     ),
     path("me/", VeterinarianAPI.as_view(), name="veterinarian-me"),
-    path("<str:slug>", GetVeterinarianAPI.as_view(), name="get-veterinarian"),
     path(
         "centers/",
         MedicalCenterListAPI.as_view(),
@@ -33,7 +32,7 @@ urlpatterns = [
         name="ranchers",
     ),
     path(
-        "remove_rancher/<str:phone>",
+        "remove_rancher/<str:phone>/",
         RemoveRancherAPI.as_view(),
         name="remove_rancher",
     ),
@@ -47,4 +46,5 @@ urlpatterns = [
         SearchVeterinarianAPI.as_view(),
         name="search_veterinarian",
     ),
+    path("<str:slug>/", GetVeterinarianAPI.as_view(), name="get-veterinarian"),
 ]
