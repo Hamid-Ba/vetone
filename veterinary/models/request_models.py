@@ -37,6 +37,7 @@ class Request(BaseModel):
         SMS = "S", "SMS"
         INPERSON = "IP", "In-Person"
 
+    tracking_code = models.BigIntegerField()
     description = models.TextField(null=True, blank=True)
     voice = models.FileField(null=True, blank=True, upload_to=request_voice_file_path)
     video = models.FileField(null=True, blank=True, upload_to=request_video_file_path)

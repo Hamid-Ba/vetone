@@ -33,12 +33,13 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "type",
             "date",
             "time",
+            "tracking_code",
             "rancher",
             "veterinarian",
             "animals",
             "image",
         ]
-        read_only_fields = ["is_active", "created_at", "rancher"]
+        read_only_fields = ["is_active", "created_at", "rancher", "tracking_code"]
 
     def validate_animals(self, value):
         # Check if each item in the animals array has the required fields
@@ -74,7 +75,8 @@ class CreateRequestSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         animals_data = validated_data.pop("animals", [])
         # Create Request
-        request_instance = Request.objects.create(**validated_data)
+        tracking_code = 1000000000000000000 + Request.objects.count()
+        request_instance = Request.objects.create(tracking_code=tracking_code, **validated_data)
 
         # Create related AnimalRequests
         for animal_data in animals_data:
