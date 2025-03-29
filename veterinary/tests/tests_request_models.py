@@ -71,8 +71,6 @@ class AnimalRequestTest(TestCase):
 
         self.payload = {
             "count": 1,
-            "weight": 45,
-            "sign": "test",
         }
 
         self.model = AnimalRequest.objects.create(

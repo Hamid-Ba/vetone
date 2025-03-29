@@ -71,8 +71,6 @@ class AnimalRequest(BaseModel):
     """Animal Request Model"""
 
     count = models.PositiveIntegerField(default=1)
-    weight = models.IntegerField(default=0)
-    sign = models.CharField(max_length=350, null=True, blank=True)
 
     animal = models.ForeignKey(
         "veterinary.Animal",

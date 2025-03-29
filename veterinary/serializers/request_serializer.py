@@ -1,4 +1,8 @@
 from rest_framework import serializers
+
+from monitoring.models.observability import CodeLog
+
+from ..models.veterinarian_models import Veterinarian
 from ..models import Request, AnimalRequest
 from .veterinarian_serializer import VeterinarianSerializer
 from .rancher_serializer import RancherVeterinarianSerializer
@@ -9,7 +13,7 @@ class AnimalRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnimalRequest
-        fields = ["id", "count", "weight", "sign", "animal", "request"]
+        fields = ["id", "count", "animal", "request"]
         read_only_fields = ["is_active", "created_at"]
         extra_kwargs = {"request": {"read_only": True}}  # Prevent manual assignment
 
@@ -17,6 +21,7 @@ class AnimalRequestSerializer(serializers.ModelSerializer):
 class CreateRequestSerializer(serializers.ModelSerializer):
     # animals = AnimalRequestSerializer(many=True, write_only=True)
     animals = serializers.JSONField(write_only=True)
+    veterinarian = serializers.CharField(required=True)
 
     class Meta:
         model = Request
@@ -38,20 +43,31 @@ class CreateRequestSerializer(serializers.ModelSerializer):
     def validate_animals(self, value):
         # Check if each item in the animals array has the required fields
         for animal in value:
-            if not all(
-                key in animal for key in ["count", "weight", "sign", "animal_id"]
-            ):
+            if not all(key in animal for key in ["count", "animal_id"]):
                 raise serializers.ValidationError(
-                    "Each animal must have 'count', 'weight', 'sign', and 'animal' fields."
+                    "Each animal must have 'count', 'animal_id' fields."
                 )
 
             # Additional validation for types, if necessary
-            if not isinstance(animal["count"], int) or not isinstance(
-                animal["weight"], int
-            ):
-                raise serializers.ValidationError(
-                    "'count' must be an integer and 'weight' must be a float."
-                )
+            if not isinstance(animal["count"], int):
+                raise serializers.ValidationError("'count' must be an integer")
+
+        return value
+
+    def validate_veterinarian(self, value):
+        # Check if each item in the veterinarian array has the required fields
+
+        try:
+            veterinarian_id = int(value)
+            veterinarian = Veterinarian.objects.get(id=veterinarian_id)
+            return veterinarian
+        except Exception as e:
+            CodeLog.log_critical(
+                "request_serializer.py - class CreateRequestSerializer",
+                "def validate_veterinarian",
+                str(e),
+            )
+            raise serializers.ValidationError("Veterinarian id is wrong")
 
         return value
 
