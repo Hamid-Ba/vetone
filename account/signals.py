@@ -11,6 +11,7 @@ from .models import User
 def after_user_registration(sender, instance, created, **kwargs):
     """Create Wallet For User after Registration"""
     if created:
-        Wallet.objects.get_or_create(user=instance, balance=50000)
+        wallet = Wallet.objects.create(store=instance)
+        wallet.charge(50000)
         if not instance.is_staff:
             Rancher.objects.get_or_create(user=instance)
