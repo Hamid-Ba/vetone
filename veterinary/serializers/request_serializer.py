@@ -10,10 +10,14 @@ from .rancher_serializer import RancherVeterinarianSerializer
 
 class AnimalRequestSerializer(serializers.ModelSerializer):
     animal = serializers.CharField(source="animal.name", read_only=True)
+    image = serializers.ImageField(source="animal.image.image", read_only=True)
+
+    def get_image(self, obj):
+        return obj.animal.image.image
 
     class Meta:
         model = AnimalRequest
-        fields = ["id", "count", "animal", "request"]
+        fields = ["id", "count", "animal", "request", "image"]
         read_only_fields = ["is_active", "created_at"]
         extra_kwargs = {"request": {"read_only": True}}  # Prevent manual assignment
 
@@ -76,7 +80,9 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         animals_data = validated_data.pop("animals", [])
         # Create Request
         tracking_code = 1000000000000000 + Request.objects.count()
-        request_instance = Request.objects.create(tracking_code=tracking_code, **validated_data)
+        request_instance = Request.objects.create(
+            tracking_code=tracking_code, **validated_data
+        )
 
         # Create related AnimalRequests
         for animal_data in animals_data:
