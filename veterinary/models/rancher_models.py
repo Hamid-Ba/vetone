@@ -38,7 +38,7 @@ class Animal(BaseModel):
     name = models.CharField(max_length=125, blank=False, null=False)
     image = models.ForeignKey(
         "gallery.Gallery",
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="animals",

@@ -10,10 +10,9 @@ from .rancher_serializer import RancherVeterinarianSerializer
 
 class AnimalRequestSerializer(serializers.ModelSerializer):
     animal = serializers.CharField(source="animal.name", read_only=True)
-    image = serializers.ImageField(source="animal.image.image", read_only=True)
-
-    def get_image(self, obj):
-        return obj.animal.image.image
+    image = serializers.ImageField(
+        source="animal.image.image", read_only=True, default=None
+    )
 
     class Meta:
         model = AnimalRequest
