@@ -38,6 +38,8 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "date",
             "time",
             "tracking_code",
+            "latitude",
+            "longitude",
             "rancher",
             "veterinarian",
             "animals",

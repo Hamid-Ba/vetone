@@ -48,6 +48,9 @@ class Request(BaseModel):
     time = models.TimeField(blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to=request_image_file_path)
 
+    latitude = models.CharField(max_length=125, blank=True, null=True)
+    longitude = models.CharField(max_length=125, blank=True, null=True)
+
     rancher = models.ForeignKey(
         "veterinary.Rancher",
         null=False,
