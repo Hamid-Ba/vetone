@@ -33,7 +33,7 @@ class RancherVeterinarianSerializer(serializers.Serializer):
         try:
             return obj.user.image.path
         except:
-            return "-"
+            return None
 
     def get_phone(self, obj):
         return obj.user.phone
@@ -44,7 +44,7 @@ class RancherVeterinarianSerializer(serializers.Serializer):
         if address:
             return f"{address.latitude} - {address.longitude}"
         else:
-            return "-"
+            return None
 
     def get_latitude(self, obj):
         address = obj.user.addresses.first()
@@ -52,7 +52,7 @@ class RancherVeterinarianSerializer(serializers.Serializer):
         if address:
             return f"{address.latitude}"
         else:
-            return "-"
+            return None
 
     def get_longitude(self, obj):
         address = obj.user.addresses.first()
@@ -60,7 +60,7 @@ class RancherVeterinarianSerializer(serializers.Serializer):
         if address:
             return f"{address.longitude}"
         else:
-            return "-"
+            return None
 
     def get_fullName(self, obj):
         return obj.user.fullName

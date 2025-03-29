@@ -64,17 +64,17 @@ class VeterinarianSerializer(UpdateVeterinarianSerializer):
     def get_city(self, obj):
         if obj.city:
             return obj.city.name
-        return "-"
+        return None
 
     def get_province(self, obj):
         if obj.province:
             return obj.province.name
-        return "-"
+        return None
 
     def get_medical_center(self, obj):
         if obj.medical_center:
             return obj.medical_center.title
-        return "-"
+        return None
 
     class Meta(UpdateVeterinarianSerializer.Meta):
         pass
