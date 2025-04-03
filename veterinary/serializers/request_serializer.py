@@ -82,7 +82,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         # Create Request
         tracking_code = 1000000000000000 + Request.objects.count()
         request_instance = Request.objects.create(
-            tracking_code=tracking_code, **validated_data
+            tracking_code=str(tracking_code), **validated_data
         )
 
         # Create related AnimalRequests

@@ -37,12 +37,20 @@ class Request(BaseModel):
         SMS = "S", "SMS"
         INPERSON = "IP", "In-Person"
 
-    tracking_code = models.BigIntegerField()
+    class RequestState(models.TextChoices):
+        New = "N", "New"
+        Confrim = "C", "Confirm"
+        Reject = "R", "Reject"
+
+    tracking_code = models.CharField(max_length=72, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     voice = models.FileField(null=True, blank=True, upload_to=request_voice_file_path)
     video = models.FileField(null=True, blank=True, upload_to=request_video_file_path)
     type = models.CharField(
         max_length=2, default=RequestType.INPERSON, choices=RequestType.choices
+    )
+    state = models.CharField(
+        max_length=2, default=RequestState.New, choices=RequestState.choices
     )
     date = models.DateField(blank=False, null=False)
     time = models.TimeField(blank=True, null=True)

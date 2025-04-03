@@ -80,6 +80,38 @@ class KavenegarSMS:
             "type": "sms",
         }
 
+    def vet_new_req(self, receptor=None, code=None):
+        self.params = {
+            "receptor": receptor,
+            "template": "vet_new_req",
+            "token": code,
+            "type": "sms",
+        }
+
+    def rancher_new_req(self, receptor=None, code=None):
+        self.params = {
+            "receptor": receptor,
+            "template": "request-new",
+            "token": code,
+            "type": "sms",
+        }
+
+    def confirm_rancher_req(self, receptor=None, code=None):
+        self.params = {
+            "receptor": receptor,
+            "template": "request-accepted",
+            "token": code,
+            "type": "sms",
+        }
+
+    def reject_rancher_req(self, receptor=None, code=None):
+        self.params = {
+            "receptor": receptor,
+            "template": "request-rejected",
+            "token": code,
+            "type": "sms",
+        }
+
     def check_wallet(self, receptor=None, code=None):
         self.params = {
             "receptor": receptor,
