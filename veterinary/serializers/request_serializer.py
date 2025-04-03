@@ -34,6 +34,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "voice",
             "video",
             "type",
+            "state",
             "date",
             "time",
             "tracking_code",
@@ -44,7 +45,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "animals",
             "image",
         ]
-        read_only_fields = ["is_active", "created_at", "rancher", "tracking_code"]
+        read_only_fields = ["is_active", "state", "created_at", "rancher", "tracking_code"]
 
     def validate_animals(self, value):
         # Check if each item in the animals array has the required fields
