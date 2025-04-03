@@ -30,13 +30,14 @@ def after_veterinarian_registration(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Veterinarian, dispatch_uid="fille_unique_code")
 def fill_veterinarian_unique_code(sender, instance, created, **kwargs):
     """Fill Veterinarian Unique Code After Confirmed"""
-    if instance.state == "C":
-        sender.objects.fill_unique_code(instance.id)
+    if not created:
+        if instance.state == "C":
+            sender.objects.fill_unique_code(instance.id)
 
-    if instance.state == "R" and not instance.code:
-        kavenegar = KavenegarSMS()
-        kavenegar.reject(instance.user.phone)
-        kavenegar.send()
+        if instance.state == "R" and not instance.code:
+            kavenegar = KavenegarSMS()
+            kavenegar.reject(instance.user.phone)
+            kavenegar.send()
 
 
 @receiver(post_save, sender=Request, dispatch_uid="notify_created_request")

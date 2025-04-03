@@ -9,6 +9,7 @@ from rest_framework import (
     response,
     status,
 )
+from django.shortcuts import get_object_or_404
 
 from config.pagination import StandardPagination
 from monitoring.models.observability import CodeLog
@@ -158,6 +159,15 @@ class AddRancherAPI(views.APIView):
         input_data.is_valid(raise_exception=True)
 
         rancher = Rancher.objects.filter(user__phone=input_data.data["phone"]).first()
+        veterinarian_user = self.request.user
+
+        veterinarian = get_object_or_404(Veterinarian, user=veterinarian_user)
+
+        if veterinarian.state != "C":
+            return response.Response(
+                {"message": "وضعیت شما تایید نشده است"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if rancher and rancher.veterinarians.contains(self.request.user.veterinarian):
             return response.Response(
@@ -167,18 +177,18 @@ class AddRancherAPI(views.APIView):
 
         if rancher:
             rancher = rancher_services.add_veterinarian_to_rancher(
-                veterinarian_user=self.request.user, rancher=rancher
+                veterinarian_user=veterinarian_user, rancher=rancher
             )
         try:
             rancher = rancher_services.add_rancher(
-                veterinarian_user=self.request.user, **input_data.data
+                veterinarian_user=veterinarian_user, **input_data.data
             )
         except Exception as e:
             CodeLog.log_critical(
                 "veteinarian_views.py",
                 "class AddRancherAPI",
                 str(e),
-                {"user_phone": self.request.user.phone},
+                {"user_phone": veterinarian_user.phone},
             )
             return response.Response(
                 {"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR

@@ -66,6 +66,10 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         try:
             veterinarian_id = int(value)
             veterinarian = Veterinarian.objects.get(id=veterinarian_id)
+
+            if veterinarian.state != "C":
+                raise serializers.ValidationError("Veterinarian Has Not Confirmed")
+
             return veterinarian
         except Exception as e:
             CodeLog.log_critical(

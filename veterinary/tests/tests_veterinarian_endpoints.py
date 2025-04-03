@@ -104,7 +104,7 @@ class PrivateTest(TestCase):
 
     def test_add_rancher_should_work_properly(self):
         """Test Add Rancher"""
-        baker.make(Veterinarian, user=self.user)
+        baker.make(Veterinarian, user=self.user, state="C")
 
         payload = {
             "fullName": "test",
