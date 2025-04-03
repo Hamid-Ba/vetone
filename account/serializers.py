@@ -91,12 +91,12 @@ class AuthenticationSerializer(serializers.Serializer):
 
         user, created = get_user_model().objects.get_or_create(phone=phone)
         user.set_password(otp)
-        
+
         IS_TEST = os.getenv("IS_TEST", default=False)
-        
+
         if IS_TEST:
             user.fullName = otp
-        
+
         user.save()
 
         # Send Otp Code
