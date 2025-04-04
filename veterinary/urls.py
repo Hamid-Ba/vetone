@@ -46,5 +46,15 @@ urlpatterns = [
         SearchVeterinarianAPI.as_view(),
         name="search_veterinarian",
     ),
+    # path("favorites/", FavoriteVeterinarianListView.as_view(), name="favorite-list"),
+    path("favorites/add/", AddFavoriteVeterinarianView.as_view(), name="add-favorite"),
+    path(
+        "favorites/", FavoriteVeterinariansView.as_view(), name="favorite-veterinarians"
+    ),
+    path(
+        "favorites/remove/<int:veterinarian_id>/",
+        RemoveFavoriteVeterinarianView.as_view(),
+        name="remove-favorite",
+    ),
     path("<str:slug>/", GetVeterinarianAPI.as_view(), name="get-veterinarian"),
 ]

@@ -49,8 +49,15 @@ class RequestAdminModel(admin.ModelAdmin):
     inlines = [AnimalRequestInline]
 
 
+class FavoriteVeterinarianAdmin(admin.ModelAdmin):
+    list_display = ("rancher", "veterinarian", "added_at")
+    search_fields = ("rancher__user__fullName", "veterinarian__user__fullName")
+    ordering = ("-added_at",)
+
+
 admin.site.register(Animal, AnimalAdminModel)
 admin.site.register(Request, RequestAdminModel)
 admin.site.register(Rancher, RancherAdminModel)
 admin.site.register(Veterinarian, VeterinarianAdminModel)
 admin.site.register(MedicalCenter, MedicalCenterAdminModel)
+admin.site.register(FavoriteVeterinarian, FavoriteVeterinarianAdmin)
