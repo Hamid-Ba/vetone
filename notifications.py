@@ -67,23 +67,23 @@ class KavenegarSMS:
     def confirm(self, receptor=None, code=None):
         self.params = {
             "receptor": receptor,
-            "template": "veterinarianconfirm",
+            "template": "veterinarian-confirm",
             "token": code,
             "type": "sms",
         }
 
-    def reject(self, receptor=None):
+    def reject(self, receptor=None, code=None):
         self.params = {
             "receptor": receptor,
-            "template": "veterinarianreject",
-            "token": receptor,
+            "template": "veterinarian-reject",
+            "token": code,
             "type": "sms",
         }
 
     def vet_new_req(self, receptor=None, code=None):
         self.params = {
             "receptor": receptor,
-            "template": "vet_new_req",
+            "template": "vet-new-req",
             "token": code,
             "type": "sms",
         }
@@ -108,6 +108,15 @@ class KavenegarSMS:
         self.params = {
             "receptor": receptor,
             "template": "request-rejected",
+            "token": code,
+            "type": "sms",
+        }
+
+    def visit_done(self, receptor=None, code=None):
+        # اتمام کار دامپزشک و نظردهی دامدار
+        self.params = {
+            "receptor": receptor,
+            "template": "visit-done",
             "token": code,
             "type": "sms",
         }

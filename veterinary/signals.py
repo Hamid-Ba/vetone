@@ -36,7 +36,7 @@ def fill_veterinarian_unique_code(sender, instance, created, **kwargs):
 
         if instance.state == "R" and not instance.code:
             kavenegar = KavenegarSMS()
-            kavenegar.reject(instance.user.phone)
+            kavenegar.reject(instance.user.phone, instance.user.phone)
             kavenegar.send()
 
 
