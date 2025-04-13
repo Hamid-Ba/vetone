@@ -14,9 +14,9 @@ from django.shortcuts import get_object_or_404
 from config.pagination import StandardPagination
 from monitoring.models.observability import CodeLog
 
-from ..services import rancher_services, veterinarian_services
+from ..services import rancher_services, veterinarian_services, request_service
 from ..filters import VeterinarianFilter
-from ..models import Veterinarian, MedicalCenter, Rancher
+from ..models import Veterinarian, MedicalCenter, Rancher, Request
 from ..serializers import veterinarian_serializer, rancher_serializer, serializers
 
 
@@ -245,6 +245,62 @@ class RemoveRancherAPI(views.APIView):
         )
         return response.Response(
             {"message": "STH Goes Wrong!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+class RateAPI(views.APIView):
+    """Score API"""
+
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, request_id: int):
+        try:
+            rancher = self.request.user.rancher
+        except Exception as e:
+            return response.Response(
+                {"message": "Only Ranchers Allowed"}, status=status.HTTP_403_FORBIDDEN
+            )
+
+        request = get_object_or_404(Request, pk=request_id)
+
+        if request.rate != 0:
+            return response.Response(
+                {"message": "You have already rated this veterinarian"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if request.rancher != rancher:
+            return response.Response(
+                {"message": "You are not allowed to rate this veterinarian"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        if request.state != "D":
+            return response.Response(
+                {"message": "You can only rate completed requests"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Validate the rate using the serializer
+        serializer = veterinarian_serializer.RateSerializer(data=self.request.data)
+        if not serializer.is_valid():
+            return response.Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Get the validated rate
+        rate = serializer.validated_data["rate"]
+
+        veterinarian = request.veterinarian
+        request_service.rate_request(request.id, rate)
+        res = veterinarian_services.rate(veterinarian_id=veterinarian.id, rate=rate)
+
+        if res:
+            return response.Response(
+                {"message": "Youre Rate Registered"}, status=status.HTTP_200_OK
+            )
+
+        return response.Response(
+            {"message": "Sth Went Wrong!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
 

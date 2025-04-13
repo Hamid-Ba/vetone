@@ -86,3 +86,18 @@ class MedicalCenterSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalCenter
         fields = "__all__"
+
+
+class RateSerializer(serializers.ModelSerializer):
+    """Rate Serializer"""
+
+    rate = serializers.IntegerField()
+
+    class Meta:
+        model = Veterinarian
+        fields = ["rate"]
+
+    def validate_rate(self, value):
+        if not 1 <= value <= 5:
+            raise serializers.ValidationError("Rate must be between 1 and 5.")
+        return value

@@ -41,6 +41,7 @@ class Request(BaseModel):
         New = "N", "New"
         Confrim = "C", "Confirm"
         Reject = "R", "Reject"
+        Done = "D", "Done"
 
     tracking_code = models.CharField(max_length=72, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -55,6 +56,7 @@ class Request(BaseModel):
     date = models.DateField(blank=False, null=False)
     time = models.TimeField(blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to=request_image_file_path)
+    rate = models.IntegerField(default=0)
 
     latitude = models.CharField(max_length=125, blank=True, null=True)
     longitude = models.CharField(max_length=125, blank=True, null=True)

@@ -37,6 +37,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "state",
             "date",
             "time",
+            "rate",
             "tracking_code",
             "latitude",
             "longitude",
@@ -51,6 +52,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "created_at",
             "rancher",
             "tracking_code",
+            "rate",
         ]
 
     def validate_animals(self, value):

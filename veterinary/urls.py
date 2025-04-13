@@ -56,5 +56,10 @@ urlpatterns = [
         RemoveFavoriteVeterinarianView.as_view(),
         name="remove-favorite",
     ),
+    path(
+        "rate/<int:request_id>/",
+        RateAPI.as_view(),
+        name="rate",
+    ),
     path("<str:slug>/", GetVeterinarianAPI.as_view(), name="get-veterinarian"),
 ]

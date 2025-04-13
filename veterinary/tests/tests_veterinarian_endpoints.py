@@ -25,6 +25,10 @@ def remove_rancher_url(phone: str):
     return reverse("veterinary:remove_rancher", kwargs={"phone": phone})
 
 
+def rate_url(request_id):
+    return reverse("veterinary:rate", kwargs={"request_id": request_id})
+
+
 class PublicTest(TestCase):
     """Test Those Endpoints Who Do Not Need User To Be Authorized"""
 
@@ -167,6 +171,29 @@ class PrivateTest(TestCase):
         rancher.refresh_from_db()
 
         self.assertFalse(rancher.veterinarians.contains(veteinarian))
+
+    def test_rate_veterinarian_by_rancher_should_work_properly(self):
+        """Test Rate Veterinarian By Rancher"""
+        veterinarian = baker.make(Veterinarian, user=self.user, rate=0)
+        user_2 = baker.make("account.User", phone="09151498721")
+        rancher = Rancher.objects.get(user=user_2)
+        request = baker.make(
+            "veterinary.Request", veterinarian=veterinarian, rancher=rancher, state="D"
+        )
+
+        self.client_2 = APIClient()
+        self.client_2.force_authenticate(user_2)
+
+        payload = {"rate": 3}
+
+        url = rate_url(request.id)
+        res = self.client_2.post(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        veterinarian.refresh_from_db()
+
+        self.assertEqual(veterinarian.rate, 3)
 
     def tearDown(self):
         """Clean up test images after the test"""

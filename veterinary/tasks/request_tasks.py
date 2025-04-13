@@ -54,10 +54,9 @@ def inform_rancher_for_confirm_or_reject_request(
 
     return False
 
+
 @shared_task
-def inform_rancher_for_end_of_request(
-        phone: str, tracking_code: str
-):
+def inform_rancher_for_end_of_request(phone: str, tracking_code: str):
     try:
         kavenegar = KavenegarSMS()
         kavenegar.visit_done(phone, tracking_code)
