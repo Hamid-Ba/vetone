@@ -60,6 +60,7 @@ class VeterinarianSerializer(UpdateVeterinarianSerializer):
     city = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
     medical_center = serializers.SerializerMethodField()
+    request_counts = serializers.SerializerMethodField()
 
     def get_city(self, obj):
         if obj.city:
@@ -75,6 +76,12 @@ class VeterinarianSerializer(UpdateVeterinarianSerializer):
         if obj.medical_center:
             return obj.medical_center.title
         return None
+
+    def get_request_counts(self, obj):
+        try:
+            return obj.requests.count()
+        except:
+            return 0
 
     class Meta(UpdateVeterinarianSerializer.Meta):
         pass
