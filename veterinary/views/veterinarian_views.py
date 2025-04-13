@@ -248,6 +248,7 @@ class RemoveRancherAPI(views.APIView):
         )
 
 
+@extend_schema(request=veterinarian_serializer.RateSerializer)
 class RateAPI(views.APIView):
     """Score API"""
 
