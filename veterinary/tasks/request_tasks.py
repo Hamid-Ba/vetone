@@ -53,3 +53,19 @@ def inform_rancher_for_confirm_or_reject_request(
         )
 
     return False
+
+@shared_task
+def inform_rancher_for_end_of_request(
+        phone: str, tracking_code: str
+):
+    try:
+        kavenegar = KavenegarSMS()
+        kavenegar.visit_done(phone, tracking_code)
+        kavenegar.send()
+        return True
+    except Exception as e:
+        CodeLog.log_critical(
+            "request_tasks.py", "def inform_rancher_for_end_of_request", str(e)
+        )
+
+    return False

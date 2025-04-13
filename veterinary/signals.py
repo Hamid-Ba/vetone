@@ -65,3 +65,7 @@ def notify_rancher_for_request_state(sender, instance, created, **kwargs):
             inform_rancher_for_confirm_or_reject_request.delay(
                 rancher_phone, instance.tracking_code, False
             )
+        elif instance.state == "D":
+            inform_rancher_for_end_of_request.delay(
+                rancher_phone, instance.tracking_code
+            )
