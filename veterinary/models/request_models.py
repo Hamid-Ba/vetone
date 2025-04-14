@@ -61,6 +61,8 @@ class Request(BaseModel):
     latitude = models.CharField(max_length=125, blank=True, null=True)
     longitude = models.CharField(max_length=125, blank=True, null=True)
 
+    analysis_result = models.TextField(null=True, blank=True)
+
     rancher = models.ForeignKey(
         "veterinary.Rancher",
         null=False,

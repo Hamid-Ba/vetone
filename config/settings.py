@@ -255,3 +255,11 @@ CACHES = {
         },
     }
 }
+
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_URL = (
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+)
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"

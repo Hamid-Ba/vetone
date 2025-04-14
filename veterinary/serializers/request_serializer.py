@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from monitoring.models.observability import CodeLog
+from ..tasks.request_tasks import analyze_request_with_ai
 
 from ..models.veterinarian_models import Veterinarian
 from ..models import Request, AnimalRequest
@@ -101,6 +102,8 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         # Create related AnimalRequests
         for animal_data in animals_data:
             AnimalRequest.objects.create(request=request_instance, **animal_data)
+
+        analyze_request_with_ai.delay(request_instance.id)
 
         return request_instance
 
