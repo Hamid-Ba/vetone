@@ -30,7 +30,7 @@ class RequestAPI(
 
     queryset = Request.objects.order_by("-id")
     serializer_class = RequestSerializer
-    pagination_class = StandardPagination
+    #pagination_class = StandardPagination
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
 

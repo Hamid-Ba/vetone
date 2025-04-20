@@ -22,7 +22,7 @@ class AnimalListAPI(generics.ListAPIView):
     serializer_class = rancher_serializer.AnimalSerializer
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
-    pagination_class = StandardPagination
+    #pagination_class = StandardPagination
 
 
 class FavoriteVeterinarianListView(generics.ListAPIView):
