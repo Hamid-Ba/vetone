@@ -8,7 +8,6 @@ from random import randint
 
 from monitoring.models.observability import CodeLog
 from notifications import KavenegarSMS
-import os
 
 from province.serializers import AddressSerializer
 
@@ -92,22 +91,16 @@ class AuthenticationSerializer(serializers.Serializer):
         user, created = get_user_model().objects.get_or_create(phone=phone)
         user.set_password(otp)
 
-        IS_TEST = bool(os.getenv("IS_TEST", default=False))
-
-        if IS_TEST:
-            user.fullName = otp
-
         user.save()
 
         # Send Otp Code
-        if not IS_TEST:
-            try:
-                kavenegar = KavenegarSMS()
-                kavenegar.register(user.phone, otp)
-                kavenegar.send()
-            except Exception as e:
-                CodeLog.log_error("account - serializers.py", "def create", str(e))
-                raise serializers.ValidationError("kavenegar error")
+        try:
+            kavenegar = KavenegarSMS()
+            kavenegar.register(user.phone, otp)
+            kavenegar.send()
+        except Exception as e:
+            CodeLog.log_error("account - serializers.py", "def create", str(e))
+            print(f"THIS IS THE CODE: {otp}")
 
         return user
 

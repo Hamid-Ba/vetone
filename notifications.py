@@ -56,7 +56,7 @@ class KavenegarSMS:
     def __init__(self):
         self.api = KavenegarAPI(settings.KAVENEGAR_API_KEY)
 
-    def register(self, receptor=None, code=None, password=None):
+    def register(self, receptor=None, code=None):
         self.params = {
             "receptor": receptor,
             "template": "otp",
