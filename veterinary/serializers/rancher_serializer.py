@@ -1,15 +1,14 @@
 from rest_framework import serializers
 
+from gallery.serializers import GallerySerializer
+
 from ..models import Animal, Rancher, Veterinarian, FavoriteVeterinarian
 
 
 class AnimalSerializer(serializers.ModelSerializer):
     """Animal Serializer"""
 
-    image = serializers.SerializerMethodField()
-
-    def get_image(self, obj):
-        return obj.get_image()
+    image = GallerySerializer(many=False)
 
     class Meta:
         model = Animal

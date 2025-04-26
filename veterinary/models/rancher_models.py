@@ -75,10 +75,6 @@ class Animal(BaseModel):
     def __str__(self):
         return self.name
 
-    def get_image(self):
-        if self.image:
-            return self.image.image.path
-
 
 class FavoriteVeterinarian(models.Model):
     rancher = models.ForeignKey("veterinary.Rancher", on_delete=models.CASCADE)
