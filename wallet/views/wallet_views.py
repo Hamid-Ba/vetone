@@ -24,7 +24,7 @@ class TransactionListAPI(generics.ListAPIView):
 
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.order_by("-created_at")
-    #pagination_class = StandardPagination
+    # pagination_class = StandardPagination
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (authentication.TokenAuthentication,)
     filter_backends = [SearchFilter]

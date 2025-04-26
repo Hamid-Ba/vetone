@@ -148,7 +148,7 @@ class PaymentsView(
     """Payments View"""
 
     serializer_class = PaymentSerializer
-    #pagination_class = StandardPagination
+    # pagination_class = StandardPagination
     queryset = Payment.objects.order_by("-created_at")
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (authentication.TokenAuthentication,)

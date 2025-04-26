@@ -6,6 +6,11 @@ from ..models import Animal, Rancher, Veterinarian, FavoriteVeterinarian
 class AnimalSerializer(serializers.ModelSerializer):
     """Animal Serializer"""
 
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        return obj.get_image()
+
     class Meta:
         model = Animal
         fields = "__all__"

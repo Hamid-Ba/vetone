@@ -151,8 +151,8 @@ class PrivateTest(TestCase):
         rancher_1 = RancherVeterinarianSerializer(rancher_1, many=False).data
         rancher_2 = RancherVeterinarianSerializer(rancher_2, many=False).data
 
-        self.assertIn(rancher_1, res.json()["results"])
-        self.assertIn(rancher_2, res.json()["results"])
+        self.assertIn(rancher_1, res.json())
+        self.assertIn(rancher_2, res.json())
 
     def test_delete_rancher_from_veterinarian_list_api(self):
         """Test Delete Rancher From Veterinarian List"""

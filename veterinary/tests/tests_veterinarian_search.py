@@ -64,15 +64,15 @@ class VeterinarianSearchTestCase(TestCase):
     def test_search_by_fullName(self):
         url = VETERINARIAN_SEARCH_URL
         response = self.client.get(url, {"fullName": "Hamid"})
-        res_json_res = response.json()["results"]
+        # res_json_res = response.json()["results"]
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res_json_res), 1)  # Only one product matches
+        self.assertEqual(len(response.json()), 1)  # Only one product matches
 
     def test_search_by_province(self):
         url = VETERINARIAN_SEARCH_URL
         response = self.client.get(url, {"province": self.province_1.id})
-        res_json_res = response.json()["results"]
+        # res_json_res = response.json()["results"]
 
         len_veters = (
             Veterinarian.objects.get_confirmed_veters()
@@ -83,12 +83,12 @@ class VeterinarianSearchTestCase(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res_json_res), len_veters)  # Only one product matches
+        self.assertEqual(len(response.json()), len_veters)  # Only one product matches
 
     def test_search_by_city(self):
         url = VETERINARIAN_SEARCH_URL
         response = self.client.get(url, {"city": self.city_1.id})
-        res_json_res = response.json()["results"]
+        # res_json_res = response.json()["results"]
 
         len_veters = (
             Veterinarian.objects.get_confirmed_veters()
@@ -97,4 +97,4 @@ class VeterinarianSearchTestCase(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res_json_res), len_veters)  # Only one product matches
+        self.assertEqual(len(response.json()), len_veters)  # Only one product matches

@@ -40,6 +40,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "time",
             "rate",
             "tracking_code",
+            "analysis_result",
             "latitude",
             "longitude",
             "rancher",
@@ -53,6 +54,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "created_at",
             "rancher",
             "tracking_code",
+            "analysis_result",
             "rate",
         ]
 
@@ -116,4 +118,10 @@ class RequestSerializer(CreateRequestSerializer):
     veterinarian = VeterinarianSerializer(read_only=True)
 
     class Meta(CreateRequestSerializer.Meta):
-        read_only_fields = ["is_active", "created_at", "rancher", "tracking_code"]
+        read_only_fields = [
+            "is_active",
+            "created_at",
+            "rancher",
+            "tracking_code",
+            "analysis_result",
+        ]

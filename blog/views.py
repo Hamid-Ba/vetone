@@ -20,7 +20,7 @@ class BlogsView(generics.ListAPIView):
     """List Of Blogs View"""
 
     queryset = models.Blog.objects.all()
-    #pagination_class = pagination.StandardPagination
+    # pagination_class = pagination.StandardPagination
     serializer_class = serializers.BlogSerializer
 
     def get_queryset(self):
@@ -42,7 +42,7 @@ class SearchBlogsAPI(generics.ListAPIView):
 
     queryset = models.Blog.objects.all()
     serializer_class = serializers.BlogSerializer
-    #pagination_class = pagination.StandardPagination
+    # pagination_class = pagination.StandardPagination
     filter_backends = [
         filters.SearchFilter,
         filters.OrderingFilter,

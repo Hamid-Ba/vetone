@@ -49,12 +49,12 @@ class PrivateTest(TestCase):
         res = self.client.get(TRANSACTION_LIST_URL)
         self.assertEqual(res.status_code, 200)
 
-        res_json_res = res.json()["results"]
+        # res_json_res = res.json()["results"]
 
-        self.assertIn(TransactionSerializer(transaction_1).data, res_json_res)
-        self.assertIn(TransactionSerializer(transaction_2).data, res_json_res)
-        self.assertIn(TransactionSerializer(transaction_3).data, res_json_res)
-        self.assertNotIn(TransactionSerializer(transaction_4).data, res_json_res)
+        self.assertIn(TransactionSerializer(transaction_1).data, res.json())
+        self.assertIn(TransactionSerializer(transaction_2).data, res.json())
+        self.assertIn(TransactionSerializer(transaction_3).data, res.json())
+        self.assertNotIn(TransactionSerializer(transaction_4).data, res.json())
 
     def test_search_transaction_by_type_should_work_properly(self):
         """Test List Of Transaction API"""
@@ -68,9 +68,9 @@ class PrivateTest(TestCase):
         res = self.client.get(TRANSACTION_LIST_URL, {"search": "C"})
         self.assertEqual(res.status_code, 200)
 
-        res_json_res = res.json()["results"]
+        # res_json_res = res.json()["results"]
 
-        self.assertIn(TransactionSerializer(transaction_1).data, res_json_res)
-        self.assertIn(TransactionSerializer(transaction_2).data, res_json_res)
-        self.assertNotIn(TransactionSerializer(transaction_3).data, res_json_res)
-        self.assertNotIn(TransactionSerializer(transaction_4).data, res_json_res)
+        self.assertIn(TransactionSerializer(transaction_1).data, res.json())
+        self.assertIn(TransactionSerializer(transaction_2).data, res.json())
+        self.assertNotIn(TransactionSerializer(transaction_3).data, res.json())
+        self.assertNotIn(TransactionSerializer(transaction_4).data, res.json())

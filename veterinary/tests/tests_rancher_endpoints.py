@@ -41,5 +41,5 @@ class PrivateTest(TestCase):
         animal_1 = AnimalSerializer(animal_1, many=False).data
         animal_2 = AnimalSerializer(animal_2, many=False).data
 
-        self.assertIn(animal_1, res.json()["results"])
-        self.assertIn(animal_2, res.json()["results"])
+        self.assertIn(animal_1, res.json())
+        self.assertIn(animal_2, res.json())

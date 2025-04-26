@@ -129,7 +129,7 @@ class RancherListAPI(generics.ListAPIView):
     queryset = Rancher.objects.order_by("-id")
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
-    #pagination_class = StandardPagination
+    # pagination_class = StandardPagination
     serializer_class = rancher_serializer.RancherVeterinarianSerializer
 
     def get_queryset(self):
@@ -321,7 +321,7 @@ class SearchVeterinarianAPI(generics.ListAPIView):
     serializer_class = veterinarian_serializer.VeterinarianSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = VeterinarianFilter
-    #pagination_class = StandardPagination
+    # pagination_class = StandardPagination
 
     # Search configuration
     search_fields = ["user__fullName", "province__name", "city__name"]

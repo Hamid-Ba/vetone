@@ -28,8 +28,8 @@ class BlogTestCase(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["results"]), 2)
-        self.assertEqual(response.data["results"][0]["title"], self.blog2.title)
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]["title"], self.blog2.title)
 
     def test_latest_blogs_view(self):
         url = reverse("blog:latest-blogs-list")
