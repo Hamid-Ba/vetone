@@ -15,7 +15,6 @@ class AnimalAdminModel(admin.ModelAdmin):
     list_display_links = ["id", "name"]
 
     search_fields = ["name"]
-    inlines = [AnimalRequestInline]
 
 
 class RancherAdminModel(admin.ModelAdmin):
