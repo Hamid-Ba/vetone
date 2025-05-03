@@ -36,6 +36,7 @@ class Request(BaseModel):
         Tell = "T", "Tell"
         SMS = "S", "SMS"
         INPERSON = "IP", "In-Person"
+        AI = "AI", "AI"
 
     class RequestState(models.TextChoices):
         New = "N", "New"
@@ -73,8 +74,8 @@ class Request(BaseModel):
 
     veterinarian = models.ForeignKey(
         "veterinary.Veterinarian",
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         on_delete=models.DO_NOTHING,
         related_name="requests",
     )

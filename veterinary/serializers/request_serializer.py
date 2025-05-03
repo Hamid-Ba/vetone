@@ -25,7 +25,7 @@ class AnimalRequestSerializer(serializers.ModelSerializer):
 class CreateRequestSerializer(serializers.ModelSerializer):
     # animals = AnimalRequestSerializer(many=True, write_only=True)
     animals = serializers.JSONField(write_only=True)
-    veterinarian = serializers.CharField(required=True)
+    veterinarian = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Request
@@ -57,6 +57,17 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "analysis_result",
             "rate",
         ]
+
+    def validate(self, attrs):
+        request_type = attrs.get("type")
+        veterinarian = attrs.get("veterinarian")
+
+        if request_type != Request.RequestType.AI:
+            if not int(veterinarian):
+                raise serializers.ValidationError(
+                    {"veterinarian": "This field is required for non-AI requests."}
+                )
+        return attrs
 
     def validate_animals(self, value):
         # Check if each item in the animals array has the required fields
@@ -93,8 +104,29 @@ class CreateRequestSerializer(serializers.ModelSerializer):
 
         return value
 
+    def validate_veterinarian(self, value):
+        if value is None:
+            return None
+
+        try:
+            veterinarian_id = int(value)
+            veterinarian = Veterinarian.objects.get(id=veterinarian_id)
+            if veterinarian.state != "C":
+                raise serializers.ValidationError("Veterinarian has not confirmed.")
+            return veterinarian
+        except Veterinarian.DoesNotExist:
+            raise serializers.ValidationError("Veterinarian not found.")
+        except Exception as e:
+            CodeLog.log_critical(
+                "request_serializer.py - class CreateRequestSerializer",
+                "def validate_veterinarian",
+                str(e),
+            )
+            raise serializers.ValidationError("Invalid veterinarian ID.")
+
     def create(self, validated_data):
         animals_data = validated_data.pop("animals", [])
+        type = validated_data.pop("type", "")
         # Create Request
         tracking_code = 1000000000000000 + Request.objects.count()
         request_instance = Request.objects.create(
@@ -105,7 +137,8 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         for animal_data in animals_data:
             AnimalRequest.objects.create(request=request_instance, **animal_data)
 
-        analyze_request_with_ai.delay(request_instance.id)
+        if type == "AI":
+            analyze_request_with_ai.delay(request_instance.id)
 
         return request_instance
 

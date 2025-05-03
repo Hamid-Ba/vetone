@@ -153,12 +153,59 @@ def ask_gemini(prompt: str):
         return "پاسخی از هوش مصنوعی دریافت نشد."
 
 
+def ask_gemini_with_image(prompt: str, image_base64: str):
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(
+        f"{settings.GEMINI_API_URL}?key={settings.GEMINI_API_KEY}",
+        headers=headers,
+        json={
+            "contents": [
+                {
+                    "parts": [
+                        {"text": prompt},
+                        {
+                            "inline_data": {
+                                "mime_type": "image/jpeg",  # or image/png
+                                "data": image_base64,
+                            }
+                        },
+                    ]
+                }
+            ]
+        },
+    )
+
+    result = response.json()
+    try:
+        return result["candidates"][0]["content"]["parts"][0]["text"]
+    except Exception:
+        CodeLog.log_error("request_tasks.py", "def ask_gemini_with_image", str(result))
+        return "پاسخی از هوش مصنوعی دریافت نشد."
+
+
+def encode_image_to_base64(image_path):
+    import base64
+
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+
 @shared_task
 def analyze_request_with_ai(request_id):
     try:
         req = Request.objects.get(id=request_id)
         prompt = build_persian_prompt(req)
-        result = ask_gemini(prompt)
+
+        image_base64 = None
+        if req.image:
+            image_base64 = encode_image_to_base64(req.image.path)
+
+        if image_base64:
+            result = ask_gemini_with_image(prompt, image_base64)
+
+        else:
+            result = ask_gemini(prompt)
 
         # Save the result to the request instance
         req.analysis_result = result

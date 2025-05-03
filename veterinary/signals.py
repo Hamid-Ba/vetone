@@ -45,11 +45,14 @@ def notify_veterinarian_and_rancher(sender, instance, created, **kwargs):
     """Fill Veterinarian Unique Code After Confirmed"""
 
     if created:
-        veter_phone = instance.veterinarian.user.phone
-        rancher_phone = instance.rancher.user.phone
+        if instance.type != Request.RequestType.AI:
+            veter_phone = instance.veterinarian.user.phone
+            rancher_phone = instance.rancher.user.phone
 
-        inform_rancher_for_new_request.delay(rancher_phone, instance.tracking_code)
-        inform_veterinarian_for_new_request.delay(veter_phone, instance.tracking_code)
+            inform_rancher_for_new_request.delay(rancher_phone, instance.tracking_code)
+            inform_veterinarian_for_new_request.delay(
+                veter_phone, instance.tracking_code
+            )
 
 
 @receiver(post_save, sender=Request, dispatch_uid="notify_request_state")
