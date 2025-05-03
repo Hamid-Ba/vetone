@@ -61,5 +61,8 @@ urlpatterns = [
         RateAPI.as_view(),
         name="rate",
     ),
+    path("medicines/", MedicineListView.as_view(), name="medicine-list"),
+    path("medicines/<int:pk>/", MedicineDetailView.as_view(), name="medicine-detail"),
+    path("medicines/create/", MedicineCreateView.as_view(), name="medicine-create"),
     path("<str:slug>/", GetVeterinarianAPI.as_view(), name="get-veterinarian"),
 ]
