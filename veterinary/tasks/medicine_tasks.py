@@ -16,7 +16,7 @@ def encode_image_to_base64(image_path):
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 
-def ask_gemini_about_medicine(medicine_name: str, image_base64: str):
+def ask_gemini_about_medicine_with_image(medicine_name: str, image_base64: str):
     headers = {"Content-Type": "application/json"}
     prompt = f"""
     یک کاربر تصویر دارویی ارسال کرده و همچنین نام آن را نوشته است.
@@ -50,12 +50,49 @@ def ask_gemini_about_medicine(medicine_name: str, image_base64: str):
         return "پاسخی از هوش مصنوعی دریافت نشد."
 
 
+def ask_gemini_about_medicine(medicine_name: str):
+    headers = {"Content-Type": "application/json"}
+    prompt = f"""
+    یک کاربر تصویر دارویی ارسال کرده و همچنین نام آن را نوشته است.
+    نام دارو: {medicine_name}
+    لطفاً بر اساس نام و تصویر، کاربردها، موارد مصرف و دسته دارویی این دارو را به زبان فارسی توضیح دهید.
+    """
+
+    response = requests.post(
+        f"{settings.GEMINI_API_URL}?key={settings.GEMINI_API_KEY}",
+        headers=headers,
+        json={
+            "contents": [
+                {
+                    "parts": [
+                        {"text": prompt},
+                    ]
+                }
+            ]
+        },
+    )
+    result = response.json()
+    try:
+        return result["candidates"][0]["content"]["parts"][0]["text"]
+    except Exception:
+        return "پاسخی از هوش مصنوعی دریافت نشد."
+
+
 @shared_task
 def analyze_medicine(medicine_id):
     try:
         med = Medicine.objects.get(id=medicine_id)
-        image_base64 = encode_image_to_base64(med.image.path)
-        result = ask_gemini_about_medicine(med.name, image_base64)
+
+        image_base64 = None
+
+        if med.image:
+            image_base64 = encode_image_to_base64(med.image.path)
+
+        if image_base64:
+            result = ask_gemini_about_medicine_with_image(med.name, image_base64)
+        else:
+            result = ask_gemini_about_medicine(med.name)
+
         med.analysis_result = result
         med.save()
 

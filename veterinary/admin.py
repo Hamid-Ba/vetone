@@ -54,6 +54,12 @@ class FavoriteVeterinarianAdmin(admin.ModelAdmin):
     ordering = ("-added_at",)
 
 
+class MedicineAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "user")
+    search_fields = ("user__fullName", "user__phone", "name")
+
+
+admin.site.register(Medicine, MedicineAdmin)
 admin.site.register(Animal, AnimalAdminModel)
 admin.site.register(Request, RequestAdminModel)
 admin.site.register(Rancher, RancherAdminModel)
