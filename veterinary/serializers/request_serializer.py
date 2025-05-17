@@ -25,7 +25,8 @@ class AnimalRequestSerializer(serializers.ModelSerializer):
 class CreateRequestSerializer(serializers.ModelSerializer):
     # animals = AnimalRequestSerializer(many=True, write_only=True)
     animals = serializers.JSONField(write_only=True)
-    veterinarian = serializers.IntegerField(required=False, allow_null=True)
+    veterinarian = serializers.CharField(required=False, allow_null=True)
+
 
     class Meta:
         model = Request
@@ -69,14 +70,32 @@ class CreateRequestSerializer(serializers.ModelSerializer):
     #             )
     #     return attrs
 
+    # def validate(self, attrs):
+    #     request_type = attrs.get("type")
+    #     veterinarian = attrs.get("veterinarian")
+
+    #     if request_type != Request.RequestType.AI:
+    #         if veterinarian is None:
+    #             raise serializers.ValidationError(
+    #                 {"veterinarian": "This field is required for non-AI requests."}
+    #             )
+
+    #     return attrs
+
     def validate(self, attrs):
         request_type = attrs.get("type")
         veterinarian = attrs.get("veterinarian")
 
         if request_type != Request.RequestType.AI:
-            if veterinarian is None:
+            if not veterinarian:
                 raise serializers.ValidationError(
                     {"veterinarian": "This field is required for non-AI requests."}
+                )
+            try:
+                attrs["veterinarian"] = int(veterinarian)
+            except (ValueError, TypeError):
+                raise serializers.ValidationError(
+                    {"veterinarian": "Veterinarian must be a valid integer ID."}
                 )
 
         return attrs
