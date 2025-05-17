@@ -58,15 +58,41 @@ class CreateRequestSerializer(serializers.ModelSerializer):
             "rate",
         ]
 
+    # def validate(self, attrs):
+    #     request_type = attrs.get("type")
+    #     veterinarian = attrs.get("veterinarian")
+
+    #     if request_type != Request.RequestType.AI:
+    #         if not int(veterinarian):
+    #             raise serializers.ValidationError(
+    #                 {"veterinarian": "This field is required for non-AI requests."}
+    #             )
+    #     return attrs
+
     def validate(self, attrs):
         request_type = attrs.get("type")
         veterinarian = attrs.get("veterinarian")
 
         if request_type != Request.RequestType.AI:
-            if not int(veterinarian):
+            if not veterinarian:
                 raise serializers.ValidationError(
                     {"veterinarian": "This field is required for non-AI requests."}
                 )
+            try:
+                veterinarian_id = int(veterinarian)
+            except (ValueError, TypeError):
+                raise serializers.ValidationError(
+                    {"veterinarian": "Veterinarian ID must be a valid integer."}
+                )
+
+            if veterinarian_id <= 0:
+                raise serializers.ValidationError(
+                    {"veterinarian": "Veterinarian ID must be a positive integer."}
+                )
+
+            # Optional: override the value in attrs with the converted int
+            attrs["veterinarian"] = veterinarian_id
+
         return attrs
 
     def validate_animals(self, value):
