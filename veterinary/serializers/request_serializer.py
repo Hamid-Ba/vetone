@@ -177,8 +177,7 @@ class CreateRequestSerializer(serializers.ModelSerializer):
         for animal_data in animals_data:
             AnimalRequest.objects.create(request=request_instance, **animal_data)
 
-        if type == "AI":
-            analyze_request_with_ai.delay(request_instance.id)
+        analyze_request_with_ai.delay(request_instance.id)
 
         return request_instance
 
