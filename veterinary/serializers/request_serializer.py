@@ -92,7 +92,8 @@ class CreateRequestSerializer(serializers.ModelSerializer):
                     {"veterinarian": "This field is required for non-AI requests."}
                 )
             try:
-                attrs["veterinarian"] = int(veterinarian)
+                veterinarian = Veterinarian.objects.get(id=int(veterinarian))
+                attrs["veterinarian"] = veterinarian.id
             except (ValueError, TypeError):
                 raise serializers.ValidationError(
                     {"veterinarian": "Veterinarian must be a valid integer ID."}
@@ -114,26 +115,26 @@ class CreateRequestSerializer(serializers.ModelSerializer):
 
         return value
 
-    def validate_veterinarian(self, value):
-        # Check if each item in the veterinarian array has the required fields
+    # def validate_veterinarian(self, value):
+    #     # Check if each item in the veterinarian array has the required fields
 
-        try:
-            veterinarian_id = int(value)
-            veterinarian = Veterinarian.objects.get(id=veterinarian_id)
+    #     try:
+    #         veterinarian_id = int(value)
+    #         veterinarian = Veterinarian.objects.get(id=veterinarian_id)
 
-            if veterinarian.state != "C":
-                raise serializers.ValidationError("Veterinarian Has Not Confirmed")
+    #         if veterinarian.state != "C":
+    #             raise serializers.ValidationError("Veterinarian Has Not Confirmed")
 
-            return veterinarian
-        except Exception as e:
-            CodeLog.log_critical(
-                "request_serializer.py - class CreateRequestSerializer",
-                "def validate_veterinarian",
-                str(e),
-            )
-            raise serializers.ValidationError("Veterinarian id is wrong")
+    #         return veterinarian
+    #     except Exception as e:
+    #         CodeLog.log_critical(
+    #             "request_serializer.py - class CreateRequestSerializer",
+    #             "def validate_veterinarian",
+    #             str(e),
+    #         )
+    #         raise serializers.ValidationError("Veterinarian id is wrong")
 
-        return value
+    #     return value
 
     def validate_veterinarian(self, value):
         if value is None:
