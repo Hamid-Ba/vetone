@@ -82,24 +82,24 @@ class CreateRequestSerializer(serializers.ModelSerializer):
 
     #     return attrs
 
-    def validate(self, attrs):
-        request_type = attrs.get("type")
-        veterinarian = attrs.get("veterinarian")
+    # def validate(self, attrs):
+    #     request_type = attrs.get("type")
+    #     veterinarian = attrs.get("veterinarian")
 
-        if request_type != Request.RequestType.AI:
-            if not veterinarian:
-                raise serializers.ValidationError(
-                    {"veterinarian": "This field is required for non-AI requests."}
-                )
-            try:
-                veterinarian = Veterinarian.objects.get(id=int(veterinarian))
-                attrs["veterinarian"] = veterinarian.id
-            except (ValueError, TypeError):
-                raise serializers.ValidationError(
-                    {"veterinarian": "Veterinarian must be a valid integer ID."}
-                )
+    #     if request_type != Request.RequestType.AI:
+    #         if not veterinarian:
+    #             raise serializers.ValidationError(
+    #                 {"veterinarian": "This field is required for non-AI requests."}
+    #             )
+    #         try:
+    #             veterinarian = Veterinarian.objects.get(id=int(veterinarian))
+    #             attrs["veterinarian"] = veterinarian.id
+    #         except (ValueError, TypeError):
+    #             raise serializers.ValidationError(
+    #                 {"veterinarian": "Veterinarian must be a valid integer ID."}
+    #             )
 
-        return attrs
+    #     return attrs
 
     def validate_animals(self, value):
         # Check if each item in the animals array has the required fields
@@ -159,8 +159,16 @@ class CreateRequestSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         animals_data = validated_data.pop("animals", [])
         type = validated_data.pop("type", "")
+        veterinarian = validated_data.get("veterinarian")
         # Create Request
         tracking_code = 1000000000000000 + Request.objects.count()
+       
+        if type != Request.RequestType.AI:
+            if not veterinarian:
+                raise serializers.ValidationError(
+                    {"veterinarian": "This field is required for non-AI requests."}
+                )
+                
         request_instance = Request.objects.create(
             tracking_code=str(tracking_code), **validated_data
         )
